@@ -18,4 +18,8 @@ public class AdminLogin implements Serializable {
     @ApiModelProperty("密码")
     private String password;
 
+    @NotBlank(message = "请输入验证码")
+    @ApiModelProperty("验证码")
+    private String verifyCode;
+
 }

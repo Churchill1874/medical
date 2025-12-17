@@ -2,9 +2,7 @@ package com.medical.controller.manage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.medical.entity.Admin;
 import com.medical.entity.Prescription;
-import com.medical.pojo.req.admin.AdminPage;
 import com.medical.pojo.req.prescription.PrescriptionPage;
 import com.medical.service.PrescriptionService;
 import io.swagger.annotations.Api;

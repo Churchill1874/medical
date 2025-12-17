@@ -15,6 +15,7 @@ import com.medical.service.EhcacheService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,6 +44,10 @@ public class AdminController {
     @PostMapping("/login")
     @ApiOperation(value = "登录", notes = "登录")
     public R<String> login(@RequestBody @Valid AdminLogin dto) {
+        String verifyCode = ehcacheService.verificationCache().get(HttpTools.getIp());
+        if (StringUtils.isEmpty(verifyCode) || !dto.getVerifyCode().equals(verifyCode)) {
+            return R.failed("验证码有误或已过期");
+        }
         Admin admin = adminService.findByAccount(dto.getAccount());
         if(admin == null){
             return R.failed("账号或者密码错误");

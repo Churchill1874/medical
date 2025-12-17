@@ -8,7 +8,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@TableName("visitors")
+//@TableName("visitors")
 public class Visitors extends BaseInfo implements Serializable {
     private static final long serialVersionUID = -8613256443103577781L;
 
