@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+        xmlns='http://www.ehcache.org/v3'
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+    <cache alias="verification_code">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.lang.String</value-type>
+        <expiry>
+            <ttl unit="seconds">300</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">50</heap>
+        </resources>
+    </cache>
+
+
+    <cache alias="admin_token">
+        <key-type>java.lang.String</key-type>
+        <value-type>com.medical.entity.Admin</value-type>
+        <expiry>
+            <ttl unit="days">1</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">10</heap>
+        </resources>
+    </cache>
+
+    <!--
+    <cache alias="player_token">
+        <key-type>java.lang.String</key-type>
+        <value-type>com.medical.pojo.resp.player.PlayerTokenResp</value-type>
+        <expiry>
+            <ttl unit="days">7</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">3000</heap>
+        </resources>
+    </cache>
+
+    <cache alias="player_info">
+        <key-type>java.lang.String</key-type>
+        <value-type>com.medical.pojo.resp.player.PlayerInfoResp</value-type>
+        <expiry>
+            <ttl unit="hours">3</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">3000</heap>
+        </resources>
+    </cache>
+-->
+
+    <cache alias="lock_3_second">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.lang.Integer</value-type>
+        <expiry>
+            <ttl unit="seconds">3</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">100</heap>
+        </resources>
+    </cache>
+
+    <cache alias="blacklist">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.util.Set</value-type>
+        <expiry>
+            <ttl unit="hours">1</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1</heap>
+        </resources>
+    </cache>
+
+    <cache alias="player_online_count">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.lang.Integer</value-type>
+        <expiry>
+            <ttl unit="seconds">300</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1</heap>
+        </resources>
+    </cache>
+
+    <cache alias="course_introduction">
+        <key-type>java.lang.String</key-type>
+        <value-type>java.util.List</value-type>
+        <expiry>
+            <ttl unit="seconds">3600</ttl>
+        </expiry>
+        <resources>
+            <heap unit="entries">1</heap>
+        </resources>
+    </cache>
+
+
+</config>
