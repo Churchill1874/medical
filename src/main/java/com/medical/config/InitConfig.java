@@ -1,5 +1,7 @@
 package com.medical.config;
 
+import com.medical.common.tools.CodeTools;
+import com.medical.common.tools.GenerateTools;
 import com.medical.entity.Admin;
 import com.medical.service.AdminService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,7 @@ public class InitConfig {
         if (admin == null) {
             admin = new Admin();
             admin.setAccount(SUPER_ADMIN_ACCOUNT);
-            admin.setPassword(PASSWORD);
+            admin.setPassword(CodeTools.md5AndSalt(PASSWORD));
             admin.setName("超级管理人");
             admin.setStatus(true);
             admin.setCreateName("系统");
