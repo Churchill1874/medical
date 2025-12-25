@@ -26,7 +26,6 @@
         </resources>
     </cache>
 
-    <!--
     <cache alias="player_token">
         <key-type>java.lang.String</key-type>
         <value-type>com.medical.pojo.resp.player.PlayerTokenResp</value-type>
@@ -34,10 +33,11 @@
             <ttl unit="days">7</ttl>
         </expiry>
         <resources>
-            <heap unit="entries">3000</heap>
+            <heap unit="entries">1000</heap>
         </resources>
     </cache>
 
+    <!--
     <cache alias="player_info">
         <key-type>java.lang.String</key-type>
         <value-type>com.medical.pojo.resp.player.PlayerInfoResp</value-type>

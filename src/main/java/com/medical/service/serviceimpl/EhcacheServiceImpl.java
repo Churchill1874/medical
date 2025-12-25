@@ -5,6 +5,7 @@ import com.medical.common.exception.DataException;
 import com.medical.common.exception.IpException;
 import com.medical.common.tools.GenerateTools;
 import com.medical.entity.Admin;
+import com.medical.pojo.resp.player.PlayerTokenResp;
 import com.medical.service.EhcacheService;
 import lombok.extern.slf4j.Slf4j;
 import org.ehcache.Cache;
@@ -109,6 +110,11 @@ public class EhcacheServiceImpl implements EhcacheService {
     public void setBlacklistIpSetCache(Set<String> blacklistIpSet) {
         cacheManager.getCache(CacheKeyConstant.BLACKLIST, String.class, (Class<Set<String>>) (Class<?>) Set.class)
                 .put(CacheKeyConstant.BLACKLIST, blacklistIpSet);
+    }
+
+    @Override
+    public Cache<String, PlayerTokenResp> playerTokenCache() {
+        return cacheManager.getCache(CacheKeyConstant.PLAYER_TOKEN, String.class, PlayerTokenResp.class);
     }
 
 }

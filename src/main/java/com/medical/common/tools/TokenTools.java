@@ -4,6 +4,7 @@ import cn.hutool.core.util.RandomUtil;
 import com.medical.common.constant.CacheKeyConstant;
 import com.medical.common.exception.TokenException;
 import com.medical.entity.Admin;
+import com.medical.pojo.resp.player.PlayerTokenResp;
 import com.medical.service.AdminService;
 import com.medical.service.EhcacheService;
 import org.apache.commons.lang3.StringUtils;
@@ -86,6 +87,40 @@ public class TokenTools {
 
         cache.put(CacheKeyConstant.PLAYER_ONLINE_COUNT, playerOnlineCount);
         return playerOnlineCount;
+    }
+
+
+
+    /**
+     * 获取管理员登录信息
+     *
+     * @return
+     */
+    public static PlayerTokenResp getPlayerToken(boolean needCheck) {
+        String headerToken = HttpTools.getHeaderToken();
+        if (StringUtils.isBlank(headerToken)) {
+            //如果要求在请求头里的token-id不能为空 要校验令牌
+            if (needCheck) {
+                throw new TokenException();
+            } else {
+                return null;
+            }
+        }
+
+        PlayerTokenResp playerTokenResp = ehcacheService.playerTokenCache().get(headerToken);
+        if (needCheck && playerTokenResp == null) {
+
+            //获取持久化中的tokenId尝试登录
+  /*          playerTokenResp = playerHelper.checkAndUpdate(headerToken);
+            if (playerTokenResp != null){
+                return playerTokenResp;
+            } else {
+                throw new TokenException();
+            }*/
+
+            throw new TokenException();
+        }
+        return playerTokenResp;
     }
 
 }

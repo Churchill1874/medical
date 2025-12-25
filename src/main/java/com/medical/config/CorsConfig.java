@@ -8,10 +8,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class CorsConfig implements WebMvcConfigurer {
 
     @Override
-    public void addCorsMappings(CorsRegistry registry){
+    public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowCredentials(true)
-                .allowedOrigins("http://www.miyakuhealth.com")
+                .allowCredentials(true)               // 允许携带 cookie / token
+                .allowedOriginPatterns("*")           //  关键点
                 .allowedMethods("*")
                 .allowedHeaders("*")
                 .exposedHeaders("*")

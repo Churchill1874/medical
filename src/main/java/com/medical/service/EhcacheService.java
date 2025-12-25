@@ -1,6 +1,7 @@
 package com.medical.service;
 
 import com.medical.entity.Admin;
+import com.medical.pojo.resp.player.PlayerTokenResp;
 import org.ehcache.Cache;
 
 import java.util.Set;
@@ -73,5 +74,11 @@ public interface EhcacheService {
      * @return
      */
     void setBlacklistIpSetCache(Set<String> blacklistIpSet);
+
+    /**
+     * 获取用户登录token
+     * @return
+     */
+    Cache<String, PlayerTokenResp> playerTokenCache();
 
 }
