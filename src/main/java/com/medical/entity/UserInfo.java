@@ -10,6 +10,9 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * 用户信息
+ */
 @Data
 @TableName("user_info")
 public class UserInfo extends BaseInfo implements Serializable {

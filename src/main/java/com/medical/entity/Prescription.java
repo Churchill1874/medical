@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 处方药
+ */
 @Data
 @TableName("prescription")
 public class Prescription extends BaseInfo implements Serializable {

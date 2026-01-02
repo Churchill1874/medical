@@ -8,6 +8,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 上传图片
+ */
 @Data
 @TableName("upload_record")
 public class UploadRecord extends BaseInfo implements Serializable {

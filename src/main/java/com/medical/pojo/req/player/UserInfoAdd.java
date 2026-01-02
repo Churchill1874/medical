@@ -23,11 +23,11 @@ public class UserInfoAdd implements Serializable {
     @ApiModelProperty("密码")
     private String password;
 
-    @NotBlank(message = "请填写性别")
+    @NotNull(message = "请填写性别")
     @ApiModelProperty("性别: 1男 0女")
     private Integer gender;
 
-    @NotBlank(message = "请输入年龄")
+    @NotNull(message = "请输入年龄")
     @ApiModelProperty("年龄")
     private Integer age;
 

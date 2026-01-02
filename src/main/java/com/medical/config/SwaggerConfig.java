@@ -27,6 +27,7 @@ public class SwaggerConfig {
     @Bean
     public Docket frontDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .pathMapping("/api")   // ⭐ 关键
                 //.globalOperationParameters(setRequestHeaders())
                 .apiInfo(apiInfo())
                 .select()
@@ -42,6 +43,7 @@ public class SwaggerConfig {
     public Docket backDocket(){
         return new Docket(DocumentationType.SWAGGER_2)
                 //.globalOperationParameters(setRequestHeaders())
+                .pathMapping("/api")   // ⭐ 关键
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.medical.controller.manage"))

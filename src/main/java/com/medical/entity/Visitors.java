@@ -7,6 +7,9 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+/**
+ * 访问记录
+ */
 @Data
 @TableName("visitors")
 public class Visitors extends BaseInfo implements Serializable {
