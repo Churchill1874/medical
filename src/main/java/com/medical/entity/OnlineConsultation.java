@@ -12,7 +12,7 @@ import java.time.LocalDate;
  * 在线问诊
  */
 @Data
-@TableName("在线问诊")
+@TableName("online_consultation")
 public class OnlineConsultation extends BaseInfo implements Serializable {
     private static final long serialVersionUID = -3231101775054760835L;
 
