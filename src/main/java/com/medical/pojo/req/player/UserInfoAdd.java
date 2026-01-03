@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class UserInfoAdd implements Serializable {
     private static final long serialVersionUID = 2963284788987492939L;
 
-    @Length(max = 30,message = "账号最多30位")
+    @Length(min = 8, max = 20,message = "账号长度8-20位之间")
     @NotBlank(message = "请输入账号")
     @ApiModelProperty("账号")
     private String username;

@@ -17,4 +17,7 @@ public interface BlacklistService extends IService<Blacklist> {
 
     void checkIp(String ip);
 
+    void addBlacklist(Blacklist blacklist);
+
+    void unlockBlacklist();
 }

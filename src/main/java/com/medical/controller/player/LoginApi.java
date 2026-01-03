@@ -48,6 +48,7 @@ public class LoginApi {
         CheckReqTools.password(req.getPassword());
 
         UserInfo userInfo = BeanUtil.toBean(req, UserInfo.class);
+        userInfo.setIp(HttpTools.getIp());
         userInfo = userInfoService.addUserInfo(userInfo);
 
         PlayerTokenResp playerTokenResp = createLoginToken(userInfo);
@@ -71,6 +72,7 @@ public class LoginApi {
 
         userInfo.setAddress(HttpTools.getAddress());
         userInfo.setLastLoginTime(LocalDateTime.now());
+        userInfo.setIp(HttpTools.getIp());
         userInfoService.updateById(userInfo);
         return R.ok(createLoginToken(userInfo));
     }

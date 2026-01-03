@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * 处方药
@@ -37,6 +38,14 @@ public class Prescription extends BaseInfo implements Serializable {
     private String mobile;
     @ApiModelProperty("收件地址邮编")
     private String postCode;
+    @ApiModelProperty("管理员的回复备注 比如大概多久到啊什么的,或者不能给开药之类的原因")
+    private String remark;
+    @ApiModelProperty("快递订单号")
+    private String expressDeliveryNo;
+    @ApiModelProperty("修改时间")
+    private LocalDateTime updateTime;
+    @ApiModelProperty("修改人")
+    private String updateName;
 
 
 }

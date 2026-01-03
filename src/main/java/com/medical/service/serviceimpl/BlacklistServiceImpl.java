@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.medical.common.exception.IpException;
 import com.medical.common.tools.HttpTools;
+import com.medical.common.tools.TokenTools;
 import com.medical.entity.Blacklist;
 import com.medical.mapper.BlacklistMapper;
 import com.medical.pojo.req.blacklist.BlacklistPageReq;
@@ -93,6 +94,23 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
 
             throw e;
         }
+    }
+
+    @Override
+    public void addBlacklist(Blacklist blacklist) {
+        blacklist.setCreateTime(LocalDateTime.now());
+        blacklist.setCreateName(TokenTools.getAdminToken(true).getCreateName());
+        save(blacklist);
+    }
+
+    @Override
+    public void unlockBlacklist() {
+        QueryWrapper<Blacklist> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .isNotNull(Blacklist::getUnlockingTime)
+                .le(Blacklist::getUnlockingTime, LocalDateTime.now());
+        remove(queryWrapper);
+
     }
 
 

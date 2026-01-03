@@ -36,7 +36,7 @@ public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultatio
     }
 
     @Override
-    public void addOnlineConsultation(OnlineConsultationAdd dto) {
+    public Long addOnlineConsultation(OnlineConsultationAdd dto) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         OnlineConsultation onlineConsultation = BeanUtil.toBean(dto, OnlineConsultation.class);
         onlineConsultation.setStatus(0);
@@ -44,6 +44,8 @@ public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultatio
         onlineConsultation.setUserId(playerTokenResp.getId());
         onlineConsultation.setCreateTime(LocalDateTime.now());
         this.save(onlineConsultation);
+
+        return onlineConsultation.getId();
     }
 
     @Override

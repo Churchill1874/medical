@@ -1,9 +1,11 @@
 package com.medical.task;
 
+import com.medical.service.BlacklistService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 /**
@@ -13,6 +15,8 @@ import java.time.LocalDateTime;
 @Component
 public class PerMinuteTask {
 
+    @Resource
+    private BlacklistService blacklistService;
 
     /**
      * 每分钟执行定时任务
@@ -20,8 +24,8 @@ public class PerMinuteTask {
     @Scheduled(cron = "0 */1 * * * ?")
     public void perMinute() {
         LocalDateTime currentTime = LocalDateTime.now();
-        //定时检查 满足时间条件就去拉取新闻
-
+        //把黑名单中有解封时间的记录清除
+        blacklistService.unlockBlacklist();
     }
 
 }

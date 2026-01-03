@@ -1,11 +1,15 @@
 package com.medical.service.serviceimpl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.medical.common.exception.DataException;
 import com.medical.common.tools.CodeTools;
 import com.medical.common.tools.HttpTools;
+import com.medical.common.tools.TimeTools;
+import com.medical.controller.player.ToolsApi;
 import com.medical.entity.UserInfo;
 import com.medical.mapper.UserInfoMapper;
 import com.medical.pojo.req.player.UserInfoPage;
@@ -13,6 +17,7 @@ import com.medical.service.UserInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 
 @Service
@@ -35,12 +40,26 @@ public class UserInfoServiceImpl extends ServiceImpl<UserInfoMapper, UserInfo> i
 
     @Override
     public UserInfo addUserInfo(UserInfo userInfo) {
+        LocalDateTime now = LocalDateTime.now();
+
         userInfo.setPassword(CodeTools.md5AndSalt(userInfo.getPassword()));
         userInfo.setCreateName("系统");
-        userInfo.setCreateTime(LocalDateTime.now());
+        userInfo.setCreateTime(now);
         userInfo.setStatus(1);
         userInfo.setAddress(HttpTools.getAddress());
         save(userInfo);
+
+        //添加校验ip一天注册数量
+        QueryWrapper<UserInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda()
+                .eq(UserInfo::getIp, HttpTools.getIp())
+                .ge(UserInfo::getCreateTime, TimeTools.getDayStart(now.toLocalDate()))
+                .le(UserInfo::getCreateTime, TimeTools.getDayEnd(now.toLocalDate()));
+        int count = count(queryWrapper);
+
+        if(count > 10){
+            throw new DataException("超过ip每日注册数量请明日再次尝试");
+        }
 
         return userInfo;
     }

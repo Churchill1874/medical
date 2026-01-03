@@ -30,11 +30,10 @@ public class OnlineConsultationApi {
 
     @PostMapping("/addOnlineConsultation")
     @ApiOperation(value = "提交在线问诊表单", notes = "提交在线问诊表单")
-    public R addOnlineConsultation(@RequestBody @Valid OnlineConsultationAdd req) {
-        onlineConsultationService.addOnlineConsultation(req);
-        return R.ok(null);
+    public R<Long> addOnlineConsultation(@RequestBody @Valid OnlineConsultationAdd req) {
+        Long id = onlineConsultationService.addOnlineConsultation(req);
+        return R.ok(id);
     }
-
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
@@ -42,7 +41,5 @@ public class OnlineConsultationApi {
         IPage<OnlineConsultation> iPage = onlineConsultationService.queryPage(req, TokenTools.getPlayerToken(true).getId());
         return R.ok(iPage);
     }
-
-
 
 }

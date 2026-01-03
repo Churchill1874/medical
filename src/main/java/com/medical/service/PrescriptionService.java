@@ -8,4 +8,9 @@ import com.medical.pojo.req.prescription.PrescriptionPage;
 public interface PrescriptionService extends IService<Prescription> {
 
     IPage<Prescription> queryPage(PrescriptionPage dto);
+
+    void addPrescription(Prescription prescription);
+
+    void updateStatus(Long id, Integer status, String remark);
+
 }

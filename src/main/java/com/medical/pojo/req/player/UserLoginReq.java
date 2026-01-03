@@ -17,7 +17,7 @@ public class UserLoginReq implements Serializable {
     private String username;
 
     @NotBlank(message = "请输入密码")
-    @Length(max = 20, message = "请输入20位以内的密码")
+    @Length(min = 8, max = 20, message = "请输入20位以内的密码")
     @ApiModelProperty(value = "密码", required = true)
     private String password;
 

@@ -10,7 +10,7 @@ public interface OnlineConsultationService extends IService<OnlineConsultation> 
 
     IPage<OnlineConsultation> queryPage(OnlineConsultationPage dto, Long userId);
 
-    void addOnlineConsultation(OnlineConsultationAdd dto);
+    Long addOnlineConsultation(OnlineConsultationAdd dto);
 
     void updateStatusById(Long id, Integer status, String adminName);
 
