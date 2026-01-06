@@ -24,7 +24,7 @@ public class AdminLoginCheckAspect {
     @Before("adminLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
         Admin admin = TokenTools.getAdminToken(true);
-        if (admin.getStatus() == null || !admin.getStatus()) {
+        if (!admin.getStatus()) {
             throw new AuthException();
         }
     }

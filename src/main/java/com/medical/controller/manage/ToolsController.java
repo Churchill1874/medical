@@ -1,6 +1,7 @@
-package com.medical.controller.player;
+package com.medical.controller.manage;
 
 import com.baomidou.mybatisplus.extension.api.R;
+import com.medical.common.annotation.AdminLoginCheck;
 import com.medical.common.annotation.PlayerLoginCheck;
 import com.medical.common.constant.enums.FileTypeEnum;
 import com.medical.common.exception.DataException;
@@ -23,19 +24,18 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Slf4j
 @RestController
 @Api(tags = "工具")
-@RequestMapping("/player/tools")
-public class ToolsApi {
+@RequestMapping("/manage/tools")
+public class ToolsController {
 
     @Autowired
     private UploadRecordService uploadRecordService;
 
     @ApiOperation("上传文件")
-    @PlayerLoginCheck
+    @AdminLoginCheck
     @PostMapping("/upload")
     public R<String> handleFileUpload(@RequestPart("file") MultipartFile file) {
         try {

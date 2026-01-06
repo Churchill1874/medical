@@ -1,5 +1,8 @@
 package com.medical.common.aspect;
 
+import com.medical.common.exception.AuthException;
+import com.medical.common.tools.TokenTools;
+import com.medical.pojo.resp.player.PlayerTokenResp;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
@@ -20,10 +23,10 @@ public class PlayerLoginCheckAspect {
 
     @Before("playerLoginCheck()")
     public void beforeCut(JoinPoint joinPoint) {
-/*        PlayerTokenResp playerToken = TokenTools.getPlayerToken(true);
-        if (playerToken.getStatus() == null || playerToken.getStatus() == UserStatusEnum.DISABLE) {
+        PlayerTokenResp playerToken = TokenTools.getPlayerToken(true);
+        if(playerToken.getStatus() == 0){
             throw new AuthException();
-        }*/
+        }
     }
 
 /*    @After("loginCheck()")
