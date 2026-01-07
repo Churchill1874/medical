@@ -33,7 +33,6 @@ public class VisitorsServiceImpl extends ServiceImpl<VisitorsMapper, Visitors> i
         return page(iPage, queryWrapper);
     }
 
-    @Async
     @Override
     public void insert(String ip, String address) {
         log.info("将要插入访客记录的ip是:{}-{}",ip,address);
