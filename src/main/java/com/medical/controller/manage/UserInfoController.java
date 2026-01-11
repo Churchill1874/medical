@@ -2,6 +2,7 @@ package com.medical.controller.manage;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
+import com.medical.common.annotation.AdminLoginCheck;
 import com.medical.entity.Blacklist;
 import com.medical.entity.UserInfo;
 import com.medical.pojo.req.blacklist.LockUserReq;
@@ -39,6 +40,7 @@ public class UserInfoController {
 
     @PostMapping("/lock")
     @ApiOperation(value = "对用户ip上锁", notes = "对用户ip上锁")
+    @AdminLoginCheck
     public R lock(@RequestBody @Valid LockUserReq req) {
         UserInfo userInfo = userInfoService.getById(req.getUserId());
         if(userInfo == null){

@@ -15,7 +15,6 @@ public class DialogueSend implements Serializable {
     @ApiModelProperty("在线问诊表单id 含义:对话属于某个在线问诊提交的病情单子,从问诊单子入口进来看相关聊天")
     private Long onlineConsultationId;
 
-    @NotNull(message = "接受消息用户id不能为空")
     @ApiModelProperty("接受消息用户id")
     private Long receiveId;
 

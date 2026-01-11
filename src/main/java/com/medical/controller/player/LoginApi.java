@@ -47,7 +47,13 @@ public class LoginApi {
         checkVerificationCode(req.getVerifyCode());
         CheckReqTools.password(req.getPassword());
 
-        UserInfo userInfo = BeanUtil.toBean(req, UserInfo.class);
+        //校验重复账号
+        UserInfo userInfo = userInfoService.findByAccount(req.getUsername());
+        if(userInfo != null){
+            throw new DataException("账号已存在");
+        }
+
+        userInfo = BeanUtil.toBean(req, UserInfo.class);
         userInfo.setIp(HttpTools.getIp());
         userInfo = userInfoService.addUserInfo(userInfo);
 

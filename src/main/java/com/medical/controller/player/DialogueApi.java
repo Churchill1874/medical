@@ -11,6 +11,7 @@ import com.medical.pojo.req.IdBase;
 import com.medical.pojo.req.dialogue.DialoguePage;
 import com.medical.pojo.req.dialogue.DialogueSend;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.AdminService;
 import com.medical.service.DialogueService;
 import com.medical.service.UserInfoService;
 import io.swagger.annotations.Api;
@@ -31,7 +32,7 @@ import javax.validation.Valid;
 public class DialogueApi {
 
     @Resource
-    private UserInfoService userInfoService;
+    private AdminService adminService;
     @Resource
     private DialogueService dialogueService;
 
@@ -48,14 +49,12 @@ public class DialogueApi {
     @ApiOperation(value = "发送", notes = "发送")
     public R send(@RequestBody @Valid DialogueSend req) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        UserInfo receiveUser = userInfoService.getById(req.getReceiveId());
-        dialogueService.sendDialogue(req, false, playerTokenResp.getId(), playerTokenResp.getUsername(), receiveUser.getUsername());
+        dialogueService.sendDialogue(req, false, playerTokenResp.getId(), playerTokenResp.getUsername(),null);
         return R.ok(null);
     }
 
     @PostMapping("/updateStatusById")
     @ApiOperation(value = "修改成已读状态", notes = "修改成已读状态")
-    @AdminLoginCheck
     public R updateStatusById(@RequestBody @Valid IdBase req) {
         dialogueService.updateStatusById(req.getId());
         return R.ok(null);

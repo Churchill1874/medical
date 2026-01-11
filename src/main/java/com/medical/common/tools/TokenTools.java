@@ -1,12 +1,14 @@
 package com.medical.common.tools;
 
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.json.JSONUtil;
 import com.medical.common.constant.CacheKeyConstant;
 import com.medical.common.exception.TokenException;
 import com.medical.entity.Admin;
 import com.medical.pojo.resp.player.PlayerTokenResp;
 import com.medical.service.AdminService;
 import com.medical.service.EhcacheService;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 /**
  * token工具类
  */
+@Slf4j
 @Component
 public class TokenTools {
 
@@ -37,6 +40,7 @@ public class TokenTools {
      */
     public static Admin getAdminToken(boolean needCheck) {
         String headerToken = HttpTools.getHeaderToken();
+        log.warn("获取管理员登录信息请求头:{}", headerToken);
         if (StringUtils.isBlank(headerToken)) {
             //如果要求在请求头里的token-id不能为空 要校验令牌
             if (needCheck) {
@@ -47,6 +51,8 @@ public class TokenTools {
         }
 
         Admin admin = ehcacheService.getAdminTokenCache().get(headerToken);
+        log.warn("获取管理员登录信息请对象:{}", JSONUtil.toJsonStr(admin));
+
         if (needCheck && admin == null) {
             throw new TokenException();
         }

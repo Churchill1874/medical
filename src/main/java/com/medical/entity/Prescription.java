@@ -26,7 +26,7 @@ public class Prescription extends BaseInfo implements Serializable {
     private String description;
     @ApiModelProperty("图片 多个图片用,逗号隔开")
     private String image;
-    @ApiModelProperty("0待处理 1已处理 2处理中")
+    @ApiModelProperty("0待处理 1处理中 2已完成")
     private Integer status;
     @ApiModelProperty("后台管理是否已读")
     private Boolean readStatus;

@@ -63,7 +63,8 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
         dialogue.setSendName(sendName);
         dialogue.setReceiveName(receiveName);
         dialogue.setCreateTime(LocalDateTime.now());
-        dialogue.setCreateName(receiveName);
+        dialogue.setCreateName(sendName);
+        dialogue.setSendId(sendId);
         save(dialogue);
     }
 
