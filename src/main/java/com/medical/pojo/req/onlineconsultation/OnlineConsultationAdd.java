@@ -24,20 +24,26 @@ public class OnlineConsultationAdd implements Serializable {
     @ApiModelProperty("性别")
     private Integer gender;
 
-    @NotBlank(message = "请输入症状描述")
     @ApiModelProperty("症状描述")
     private String symptom;
 
-    @NotBlank(message = "请输入持续时间")
     @ApiModelProperty("持续时间")
     private String duration;
 
-    @NotBlank(message = "请输入过敏史")
     @ApiModelProperty("过敏史")
     private String allergyHistory;
 
-    @NotBlank(message = "请输入急出病描述")
     @ApiModelProperty("基础病描述")
     private String underlyingDiseases;
+
+    @ApiModelProperty("手机号")
+    private String phone;
+
+    @ApiModelProperty("微信号")
+    private String wechat;
+
+    @NotBlank(message = "请输入病情描述")
+    @ApiModelProperty("描述")
+    private String description;
 
 }

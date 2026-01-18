@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -24,7 +25,7 @@ public class Prescription extends BaseInfo implements Serializable {
     private String medicalName;
     @ApiModelProperty("用户填写描述")
     private String description;
-    @ApiModelProperty("图片 多个图片用,逗号隔开")
+    @ApiModelProperty("药品图片 多个图片用,逗号隔开")
     private String image;
     @ApiModelProperty("0待处理 1处理中 2已完成")
     private Integer status;
@@ -46,6 +47,23 @@ public class Prescription extends BaseInfo implements Serializable {
     private LocalDateTime updateTime;
     @ApiModelProperty("修改人")
     private String updateName;
+
+    @ApiModelProperty("真实姓名")
+    private String realName;
+    @ApiModelProperty("出生年月日 如:2000-10-01")
+    private LocalDate birthday;
+    @ApiModelProperty("性别")
+    private Integer gender;
+    @ApiModelProperty("过敏史")
+    private String allergyHistory;
+    @ApiModelProperty("基础病描述")
+    private String underlyingDiseases;
+    @ApiModelProperty("指定取药局(谷歌定位图片)")
+    private String googleImage;
+    @ApiModelProperty("联系电话")
+    private String phone;
+    @ApiModelProperty("邮箱")
+    private String email;
 
 
 }

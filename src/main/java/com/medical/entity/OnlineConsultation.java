@@ -5,6 +5,7 @@ import com.medical.entity.base.BaseInfo;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -42,5 +43,14 @@ public class OnlineConsultation extends BaseInfo implements Serializable {
 
     @ApiModelProperty("0待处理 1处理中 2取消 3完成")
     private Integer status;
+
+    @ApiModelProperty("手机号")
+    private String phone;
+
+    @ApiModelProperty("微信号")
+    private String wechat;
+
+    @ApiModelProperty("描述")
+    private String description;
 
 }

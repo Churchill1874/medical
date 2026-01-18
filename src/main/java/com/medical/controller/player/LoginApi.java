@@ -9,10 +9,12 @@ import com.medical.common.tools.CheckReqTools;
 import com.medical.common.tools.CodeTools;
 import com.medical.common.tools.GenerateTools;
 import com.medical.common.tools.HttpTools;
+import com.medical.entity.Admin;
 import com.medical.entity.UserInfo;
 import com.medical.pojo.req.player.UserInfoAdd;
 import com.medical.pojo.req.player.UserLoginReq;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.AdminService;
 import com.medical.service.EhcacheService;
 import com.medical.service.UserInfoService;
 import io.swagger.annotations.Api;
@@ -39,6 +41,9 @@ public class LoginApi {
     @Resource
     private EhcacheService ehcacheService;
 
+    @Resource
+    private AdminService adminService;
+
 
     @PostMapping("/register")
     @ApiOperation(value = "注册", notes = "注册")
@@ -50,6 +55,10 @@ public class LoginApi {
         //校验重复账号
         UserInfo userInfo = userInfoService.findByAccount(req.getUsername());
         if(userInfo != null){
+            throw new DataException("账号已存在");
+        }
+        Admin admin = adminService.findByAccount(req.getUsername());
+        if(admin != null){
             throw new DataException("账号已存在");
         }
 

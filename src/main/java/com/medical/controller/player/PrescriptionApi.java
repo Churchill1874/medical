@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 @Slf4j
 @RestController
@@ -36,7 +37,7 @@ public class PrescriptionApi {
 
     @PostMapping("/add")
     @ApiOperation(value = "提交下单", notes = "提交下单")
-    public R add(@RequestBody PrescriptionAdd req) {
+    public R add(@RequestBody @Valid PrescriptionAdd req) {
         Prescription prescription = BeanUtil.toBean(req, Prescription.class);
         prescriptionService.addPrescription(prescription);
         return R.ok(null);

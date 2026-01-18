@@ -12,6 +12,7 @@ import com.medical.pojo.req.dialogue.DialoguePage;
 import com.medical.pojo.req.dialogue.DialogueSend;
 import com.medical.service.DialogueService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,12 @@ import java.time.LocalDateTime;
 
 @Service
 public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> implements DialogueService {
+
+    private final SimpMessagingTemplate messagingTemplate;
+
+    public DialogueServiceImpl(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
 
     @Override
     public IPage<Dialogue> queryPage(DialoguePage dto) {
@@ -66,6 +73,8 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
         dialogue.setCreateName(sendName);
         dialogue.setSendId(sendId);
         save(dialogue);
+
+        messagingTemplate.convertAndSendToUser(receiveName, "/queue/private", dialogue);
     }
 
     @Async

@@ -58,5 +58,8 @@ public class OfflineTranslation extends UpdateBaseInfo implements Serializable {
     @ApiModelProperty("微信号")
     private String wechat;
 
+    @ApiModelProperty("预约时间")
+    private String appointmentTime;
+
 
 }

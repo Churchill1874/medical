@@ -11,6 +11,7 @@ import com.medical.service.OnlineConsultationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,9 @@ public class OnlineConsultationApi {
     @PostMapping("/addOnlineConsultation")
     @ApiOperation(value = "提交在线问诊表单", notes = "提交在线问诊表单")
     public R<Long> addOnlineConsultation(@RequestBody @Valid OnlineConsultationAdd req) {
+        if(StringUtils.isEmpty(req.getPhone()) && StringUtils.isEmpty(req.getWechat())){
+            return R.failed("请输入微信号或者手机号");
+        }
         Long id = onlineConsultationService.addOnlineConsultation(req);
         return R.ok(id);
     }
