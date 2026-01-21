@@ -46,4 +46,8 @@ public class OnlineConsultationAdd implements Serializable {
     @ApiModelProperty("描述")
     private String description;
 
+    @NotBlank(message = "请上传图片")
+    @ApiModelProperty("参考资料 (添加图片)")
+    private String image;
+
 }
