@@ -9,6 +9,7 @@ import com.medical.entity.OnlinePrescription;
 import com.medical.pojo.req.onlineconsultation.OnlineConsultationAdd;
 import com.medical.pojo.req.onlineconsultation.OnlineConsultationPage;
 import com.medical.pojo.req.onlineprescription.OnlinePrescriptionAdd;
+import com.medical.pojo.req.onlineprescription.OnlinePrescriptionPage;
 import com.medical.service.OnlinePrescriptionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,7 +44,7 @@ public class OnlinePrescriptionApi {
 
     @PostMapping("/queryPage")
     @ApiOperation(value = "分页", notes = "分页")
-    public R<IPage<OnlinePrescription>> queryPage(@RequestBody @Valid OnlineConsultationPage req) {
+    public R<IPage<OnlinePrescription>> queryPage(@RequestBody @Valid OnlinePrescriptionPage req) {
         IPage<OnlinePrescription> iPage = onlinePrescriptionService.queryPage(req, TokenTools.getPlayerToken(true).getId());
         return R.ok(iPage);
     }
