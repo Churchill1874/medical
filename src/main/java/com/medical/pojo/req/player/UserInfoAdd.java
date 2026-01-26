@@ -27,10 +27,6 @@ public class UserInfoAdd implements Serializable {
     @ApiModelProperty("性别: 1男 0女")
     private Integer gender;
 
-    @NotNull(message = "请输入年龄")
-    @ApiModelProperty("年龄")
-    private Integer age;
-
     @Length(max = 100,message = "请输入100位长度以内的邮箱")
     @NotBlank(message = "请填写邮箱,方便密码找回")
     @ApiModelProperty("邮箱")
@@ -49,6 +45,10 @@ public class UserInfoAdd implements Serializable {
     @NotBlank(message = "请输入验证码")
     @ApiModelProperty("验证码")
     private String verifyCode;
+
+    @NotBlank(message = "请填写如何知道的该网站")
+    @ApiModelProperty("如何知道的该网站,直接传入中文 1.朋友推荐 2.网站网页看到的 3.社交软件看到的 4.其他")
+    private String source;
 
 
 }

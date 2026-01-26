@@ -16,53 +16,53 @@ public class OfflineTranslationAdd implements Serializable {
     @ApiModelProperty(value = "直接输入中文 : 1.预防医疗 2.再生医疗 3.医疗美容 4.普通医疗",required = true)
     private String medicalType;
 
-    @NotBlank(message = "请选择项目类型")
-    @ApiModelProperty(value = "直接输入中文 项目类型  1.预防医疗(1.精密体检 2.血液净化) 2.再生医疗(1.自体脂肪干细胞 2.nk细胞 3.纤维芽细胞) 3.医疗美容(1.轻医美 2.外科手术 3.修复手术) 4.普通医疗(1.专科诊所 2.综合医院 3.介绍信)",required = true)
+    @ApiModelProperty(value = "直接输入中文 项目类型  " + "如果是" +
+            "预防医疗(1.精密体检 2.癌症筛查 3.血液净化 4.其他)" +
+            "再生医疗(1.自体脂肪干细胞 2.异体干细胞上清液 3.nk细胞 4.纤维芽细胞 5.prp 6.其他) " +
+            "医疗美容(1.轻医美 2.外科手术 3.修复手术) " +
+            "普通医疗 暂时普通医疗没有项目选择")
     private String projectType;
-
-    @NotNull(message = "请输入性别")
-    @ApiModelProperty(value = "性别 1男 0女",required = true)
-    private Integer gender;
-
-/*    @NotNull(message = "请输入年龄")
-    @ApiModelProperty("年龄")
-    private Integer age;*/
 
     @NotBlank(message = "请输入真实姓名")
     @ApiModelProperty(value = "真实名称",required = true)
     private String realName;
 
-    @NotBlank(message = "请输入邮箱")
-    @ApiModelProperty(value = "邮箱",required = true)
-    private String email;
-
-    @NotBlank(message = "请输入手机号")
-    @ApiModelProperty(value = "手机号",required = true)
-    private String phone;
-
     @NotNull(message = "请输入生日")
     @ApiModelProperty(value = "出生年月日 如:2000-10-01",required = true)
     private LocalDate birthday;
 
-    //@NotBlank(message = "请输入过敏史")
-    @ApiModelProperty(value = "过敏史")
-    private String allergyHistory;
+    @NotNull(message = "请输入性别")
+    @ApiModelProperty(value = "性别 1男 0女",required = true)
+    private Integer gender;
 
     @NotBlank(message = "请输入病情描述")
     @ApiModelProperty(value = "描述",required = true)
     private String description;
 
-    //@NotBlank(message = "请输入预算")
-    @ApiModelProperty(value = "预算 5000人民币以下 5000-1万人民币 1万到3万人民币 3万以上",required = true)
-    private String budget;
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 
     @NotBlank(message = "请输入微信号")
     @ApiModelProperty("微信号")
     private String wechat;
 
+    @ApiModelProperty(value = "手机号")
+    private String phone;
+
+    @ApiModelProperty(value = "过敏史")
+    private String allergyHistory;
+
+    @ApiModelProperty(value = "预算 5000人民币以下 5000-1万人民币 1万到3万人民币 3万以上")
+    private String budget;
+
     @ApiModelProperty("预约时间")
     private String appointmentTime;
 
+    @ApiModelProperty("是否已经有意向医院(有 / 无)")
+    private String targetHospital;
+
+    @ApiModelProperty("补充信息")
+    private String remark;
 
 
 }

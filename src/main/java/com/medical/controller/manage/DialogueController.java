@@ -48,7 +48,7 @@ public class DialogueController {
     }
 
     @PostMapping("/send")
-    @ApiOperation(value = "发送", notes = "发送")
+    @ApiOperation(value = "发送在线咨询重大疾病对话", notes = "发送在线咨询重大疾病对话")
     public R send(@RequestBody @Valid OnlineConsultationDialogueSend req) {
         if(req.getOnlineConsultationId() == null){
             return R.failed("缺少在线咨询订单id");

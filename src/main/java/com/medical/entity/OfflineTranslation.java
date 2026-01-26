@@ -61,5 +61,10 @@ public class OfflineTranslation extends UpdateBaseInfo implements Serializable {
     @ApiModelProperty("预约时间")
     private String appointmentTime;
 
+    @ApiModelProperty("是否已经有意向医院(有 / 无)")
+    private String targetHospital;
+
+    @ApiModelProperty("补充信息")
+    private String remark;
 
 }
