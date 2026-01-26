@@ -55,4 +55,7 @@ public class UserInfo extends BaseInfo implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginTime;
 
+    @ApiModelProperty("如何知道的该网站,直接传入中文 1.朋友推荐 2.网站网页看到的 3.社交软件看到的 4.其他")
+    private String source;
+
 }
