@@ -1,0 +1,173 @@
+create table admin
+        (
+        id              bigint auto_increment comment '主键ID'
+        primary key,
+        create_time     datetime             null comment '创建时间',
+        create_name     varchar(64)          null comment '创建人',
+        name            varchar(64)          null comment '名字',
+        account         varchar(64)          not null comment '账号',
+        password        varchar(255)         not null comment '密码',
+        login_ip        varchar(64)          null comment '登录IP',
+        status          tinyint(1) default 1 null comment '是否可用(1启用 0禁用)',
+        last_login_time datetime             null comment '最后登录时间',
+        address         varchar(255)         null comment '登录地址'
+        )
+        comment '管理员表';
+
+        create table blacklist
+        (
+        id             bigint auto_increment comment '主键ID'
+        primary key,
+        create_time    datetime     null comment '创建时间',
+        create_name    varchar(64)  null comment '创建人',
+        ip             varchar(64)  not null comment 'IP地址',
+        address        varchar(255) null comment '地址',
+        remark         varchar(255) null comment '备注',
+        unlocking_time datetime     null comment '解封时间'
+        )
+        comment 'IP黑名单表';
+
+        create table dialogue
+        (
+        id                     bigint auto_increment comment '主键ID'
+        primary key,
+        create_time            datetime             null comment '创建时间',
+        create_name            varchar(64)          null comment '创建人',
+        online_consultation_id bigint               not null comment '在线问诊表单ID',
+        is_admin               tinyint(1) default 0 null comment '是否管理员发送(0否 1是)',
+        receive_id             bigint               null comment '接收用户ID',
+        receive_name           varchar(64)          null comment '接收用户名称',
+        send_id                bigint               null comment '发送用户ID',
+        send_name              varchar(64)          null comment '发送用户名称',
+        content                text                 null comment '消息内容',
+        type                   tinyint    default 1 null comment '消息类型(1文字 2图片)',
+        is_read                tinyint(1) default 0 null comment '是否已读(0未读 1已读)',
+        read_time              datetime             null comment '读取时间',
+        business               tinyint              null comment '业务类型(1处方药咨询 2重大疾病问诊)'
+        )
+        comment '问诊对话表';
+
+        create table offline_translation
+        (
+        id               bigint auto_increment comment '主键ID'
+        primary key,
+        user_id          bigint                  null comment '用户ID',
+        username         varchar(64)             null comment '用户账号',
+        medical_type     varchar(32)             null comment '医疗类型 1预防 2再生 3医美 4普通医疗',
+        project_type     varchar(64)             null comment '项目类型',
+        gender           tinyint                 null comment '性别(1男 0女)',
+        age              int                     null comment '年龄',
+        real_name        varchar(64)             null comment '真实姓名',
+        email            varchar(128)            null comment '邮箱',
+        phone            varchar(32)             null comment '手机号',
+        birthday         date                    null comment '出生日期',
+        allergy_history  varchar(255)            null comment '过敏史',
+        description      text                    null comment '病情/需求描述',
+        budget           varchar(64)             null comment '预算区间',
+        status           varchar(32) default '0' null comment '状态(0待受理 1审核中 2待付款 3预约成功 4预约取消)',
+        wechat           varchar(64)             null comment '微信号',
+        appointment_time varchar(64)             null comment '预约时间说明',
+        create_time      datetime                null comment '创建时间',
+        create_name      varchar(64)             null comment '创建人',
+        update_time      datetime                null comment '更新时间',
+        update_name      varchar(64)             null comment '更新人'
+        )
+        comment '线下医疗翻译/咨询申请表';
+
+        create table online_consultation
+        (
+        id                  bigint auto_increment comment '主键ID'
+        primary key,
+        create_time         datetime          null comment '创建时间',
+        create_name         varchar(64)       null comment '创建人',
+        user_id             bigint            null comment '用户ID',
+        real_name           varchar(64)       null comment '真实姓名',
+        birthday            date              null comment '出生日期',
+        gender              tinyint           null comment '性别(1男 0女)',
+        symptom             text              null comment '症状描述',
+        duration            varchar(64)       null comment '症状持续时间',
+        allergy_history     varchar(255)      null comment '过敏史',
+        underlying_diseases varchar(255)      null comment '基础病描述',
+        status              tinyint default 0 null comment '状态(0待处理 1处理中 2取消 3完成)',
+        phone               varchar(32)       null comment '手机号',
+        wechat              varchar(64)       null comment '微信号',
+        description         text              null comment '补充描述'
+        )
+        comment '在线问诊表';
+
+        create table prescription
+        (
+        id                  bigint auto_increment comment '主键ID'
+        primary key,
+        create_time         datetime             null comment '创建时间',
+        create_name         varchar(64)          null comment '创建人',
+        user_id             bigint               null comment '用户ID',
+        account             varchar(64)          null comment '登录账号',
+        medical_name        varchar(128)         null comment '用户填写药品名称',
+        description         text                 null comment '用户填写描述',
+        image               varchar(1000)        null comment '药品图片(多个用逗号分隔)',
+        status              tinyint    default 0 null comment '状态(0待处理 1处理中 2已完成)',
+        read_status         tinyint(1) default 0 null comment '后台是否已读(0未读 1已读)',
+        username            varchar(64)          null comment '收件人名称',
+        address             varchar(255)         null comment '收件人地址',
+        mobile              varchar(32)          null comment '收件人手机号',
+        post_code           varchar(32)          null comment '收件地址邮编',
+        remark              varchar(255)         null comment '管理员回复备注',
+        express_delivery_no varchar(64)          null comment '快递单号',
+        update_time         datetime             null comment '修改时间',
+        update_name         varchar(64)          null comment '修改人',
+        real_name           varchar(64)          null comment '真实姓名',
+        birthday            date                 null comment '出生日期',
+        gender              tinyint              null comment '性别(1男 0女)',
+        allergy_history     varchar(255)         null comment '过敏史',
+        underlying_diseases varchar(255)         null comment '基础病描述',
+        google_image        varchar(255)         null comment '指定取药局(谷歌定位图片)',
+        phone               varchar(32)          null comment '联系电话',
+        email               varchar(128)         null comment '邮箱'
+        )
+        comment '处方药申请表';
+
+        create table upload_record
+        (
+        id          bigint auto_increment comment '主键ID'
+        primary key,
+        path        varchar(500) not null comment '文件路径',
+        file_type   varchar(32)  not null comment '文件类型(FileTypeEnum)',
+        create_time datetime     null comment '创建时间',
+        create_name varchar(64)  null comment '创建人'
+        )
+        comment '上传文件记录表';
+
+        create table user_info
+        (
+        id              bigint auto_increment comment '主键ID'
+        primary key,
+        create_time     datetime          null comment '创建时间',
+        create_name     varchar(64)       null comment '创建人',
+        real_name       varchar(64)       null comment '真实姓名',
+        username        varchar(64)       not null comment '账号',
+        password        varchar(128)      not null comment '密码',
+        gender          tinyint           null comment '性别(1男 0女)',
+        age             int               null comment '年龄',
+        status          tinyint default 1 null comment '状态(1正常 0禁用)',
+        email           varchar(128)      null comment '邮箱',
+        phone           varchar(32)       null comment '手机号',
+        birthday        date              null comment '出生日期',
+        ip              varchar(64)       null comment '最后登录IP',
+        address         varchar(255)      null comment '地址',
+        last_login_time datetime          null comment '最后一次登录时间'
+        )
+        comment '用户信息表';
+
+        create table visitors
+        (
+        id          bigint auto_increment comment '主键ID'
+        primary key,
+        create_time datetime     null comment '访问时间',
+        create_name varchar(64)  null comment '创建人',
+        ip          varchar(64)  null comment '访问IP',
+        address     varchar(255) null comment '地址',
+        user_agent  varchar(512) null comment '浏览器指纹(User-Agent)'
+        )
+        comment '访问记录表';
+

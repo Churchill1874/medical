@@ -35,6 +35,7 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
         queryWrapper
                 .eq(dto.getOnlineConsultationId() != null, Dialogue::getOnlineConsultationId, dto.getOnlineConsultationId())
                 .eq(dto.getIsRead() != null, Dialogue::getIsRead, dto.getIsRead())
+                .eq(dto.getBusiness() != null, Dialogue::getBusiness, dto.getBusiness())
                 .orderByDesc(Dialogue::getCreateTime);
 
         //如果搜索了用户id
@@ -63,7 +64,7 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
     }
 
     @Override
-    public void sendDialogue(DialogueSend dto, Boolean isAdmin, Long sendId, String sendName, String receiveName) {
+    public void sendDialogue(DialogueSend dto, Boolean isAdmin, Long sendId, String sendName,Long receiveId, String receiveName, int business) {
         Dialogue dialogue = BeanUtil.toBean(dto, Dialogue.class);
         dialogue.setIsRead(Boolean.FALSE);
         dialogue.setIsAdmin(isAdmin);
@@ -72,6 +73,8 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
         dialogue.setCreateTime(LocalDateTime.now());
         dialogue.setCreateName(sendName);
         dialogue.setSendId(sendId);
+        dialogue.setBusiness(business);
+        dialogue.setReceiveId(receiveId);
         save(dialogue);
 
         messagingTemplate.convertAndSendToUser(receiveName, "/queue/private", dialogue);

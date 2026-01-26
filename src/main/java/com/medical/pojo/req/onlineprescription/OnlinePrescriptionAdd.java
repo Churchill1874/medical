@@ -1,36 +1,23 @@
-package com.medical.entity;
+package com.medical.pojo.req.onlineprescription;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.medical.entity.base.BaseInfo;
+import com.medical.pojo.req.PageBase;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-/**
- * 处方药
- */
 @Data
-@TableName("prescription")
-public class Prescription extends BaseInfo implements Serializable {
-    private static final long serialVersionUID = 1819175993252694651L;
+public class OnlinePrescriptionAdd extends PageBase implements Serializable {
+    private static final long serialVersionUID = 6795965318331716685L;
 
-    @ApiModelProperty("用户id")
-    private Long userId;
-    @ApiModelProperty("登录账号")
-    private String account;
     @ApiModelProperty("用户填写药品名称")
     private String medicalName;
-    @ApiModelProperty("用户填写描述")
-    private String description;
+
     @ApiModelProperty("药品图片 多个图片用,逗号隔开")
     private String image;
-    @ApiModelProperty("0待处理 1处理中 2已完成")
-    private Integer status;
-    @ApiModelProperty("后台管理是否已读")
-    private Boolean readStatus;
     @ApiModelProperty("收件人名称")
     private String username;
     @ApiModelProperty("收件人地址")
@@ -39,33 +26,40 @@ public class Prescription extends BaseInfo implements Serializable {
     private String mobile;
     @ApiModelProperty("收件地址邮编")
     private String postCode;
-    @ApiModelProperty("备注")
-    private String remark;
-    @ApiModelProperty("原因")
-    private String reason;
     @ApiModelProperty("快递订单号")
     private String expressDeliveryNo;
-    @ApiModelProperty("修改时间")
-    private LocalDateTime updateTime;
-    @ApiModelProperty("修改人")
-    private String updateName;
 
+    @NotBlank(message = "")
+    @ApiModelProperty("当前症状描述")
+    private String description;
+    @NotBlank(message = "")
+    @ApiModelProperty("症状持续时间")
+    private String duration;
+    @NotBlank(message = "")
     @ApiModelProperty("真实姓名")
     private String realName;
+    @NotNull(message = "")
     @ApiModelProperty("出生年月日 如:2000-10-01")
     private LocalDate birthday;
+    @NotNull(message = "")
     @ApiModelProperty("性别")
     private Integer gender;
-    @ApiModelProperty("过敏史")
+    @NotBlank(message = "")
+    @ApiModelProperty("药物过敏史")
     private String allergyHistory;
-    @ApiModelProperty("基础病描述")
+    @NotBlank(message = "")
+    @ApiModelProperty("既往病史")
     private String underlyingDiseases;
+    @ApiModelProperty("当前正在使用的药品 备注:如果没有请写无,避免重复用药")
+    private String currentMedical="无";
+    @NotBlank(message = "")
     @ApiModelProperty("指定取药局(谷歌定位图片)")
     private String googleImage;
     @ApiModelProperty("联系电话")
     private String phone;
     @ApiModelProperty("邮箱")
     private String email;
-
+    @ApiModelProperty("其他补充信息")
+    private String remark;
 
 }

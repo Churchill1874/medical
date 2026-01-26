@@ -11,9 +11,11 @@ import java.io.Serializable;
 public class DialogueSend implements Serializable {
     private static final long serialVersionUID = 5006342787246074904L;
 
-    @NotNull(message = "问诊id不能为空")
     @ApiModelProperty("在线问诊表单id 含义:对话属于某个在线问诊提交的病情单子,从问诊单子入口进来看相关聊天")
     private Long onlineConsultationId;
+
+    @ApiModelProperty("在线咨询药品问诊表单id 含义:对话属于某个在线问诊提交的病情单子,从问诊单子入口进来看相关聊天")
+    private Long onlinePrescriptionId;
 
     @ApiModelProperty("接受消息用户id")
     private Long receiveId;

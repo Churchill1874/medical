@@ -16,6 +16,6 @@ public class PrescriptionUpdateStatus extends IdBase implements Serializable {
     private Integer status;
 
     @ApiModelProperty("管理员的备注")
-    private String remark;
+    private String reason;
 
 }

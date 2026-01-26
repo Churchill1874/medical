@@ -10,7 +10,7 @@ public interface DialogueService extends IService<Dialogue> {
 
     IPage<Dialogue> queryPage(DialoguePage dto);
 
-    void sendDialogue(DialogueSend dto, Boolean isAdmin, Long sendId, String sendName, String receiveName);
+    void sendDialogue(DialogueSend dto, Boolean isAdmin, Long sendId, String sendName,Long receiveId, String receiveName, int business);
 
     void updateStatusById(Long id);
 

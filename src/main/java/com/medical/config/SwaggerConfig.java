@@ -57,7 +57,7 @@ public class SwaggerConfig {
     private ApiInfo apiInfo() {
         Contact contact = new Contact("medical", "http://127.0.0.1:8009/doc.html", "joy1cs1112@gmail.com");
         return new ApiInfoBuilder()
-                .title("快聊测试API接口")//标题
+                .title("医美测试API接口")//标题
                 .description("API接口的描述")//文档接口的描述
                 .contact(contact)
                 .termsOfServiceUrl("www.baidu.com")

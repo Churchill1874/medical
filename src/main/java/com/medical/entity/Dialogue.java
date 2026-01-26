@@ -20,6 +20,9 @@ public class Dialogue extends BaseInfo implements Serializable {
     @ApiModelProperty("在线问诊表单id 含义:对话属于某个在线问诊提交的病情单子,从问诊单子入口进来看相关聊天")
     private Long onlineConsultationId;
 
+    @ApiModelProperty("在线咨询处方药")
+    private Long onlinePrescriptionId;
+
     @ApiModelProperty("是否是管理员发送的")
     private Boolean isAdmin;
 
@@ -47,5 +50,8 @@ public class Dialogue extends BaseInfo implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("读取时间")
     private LocalDateTime readTime;
+
+    @ApiModelProperty("1处方药咨询 2重大疾病问诊")
+    private Integer business;
 
 }

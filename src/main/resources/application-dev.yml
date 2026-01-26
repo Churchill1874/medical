@@ -23,6 +23,7 @@ spring:
     username: root
     #password: 123456
     password: Root@123456
+    #password: t*Bo0)O1li!I%b>.8Y1$-zRC#3
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       stat-view-servlet:

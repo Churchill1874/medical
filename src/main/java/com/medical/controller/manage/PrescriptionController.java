@@ -42,7 +42,7 @@ public class PrescriptionController {
     @PostMapping("/updateStatus")
     @ApiOperation(value = "修改处理状态", notes = "修改处方药处理状态")
     public R updateStatus(@RequestBody @Valid PrescriptionUpdateStatus req) {
-        prescriptionService.updateStatus(req.getId(), req.getStatus(), req.getRemark());
+        prescriptionService.updateStatus(req.getId(), req.getStatus(), req.getReason());
         return R.ok(null);
     }
 

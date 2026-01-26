@@ -48,8 +48,22 @@ public class DialogueApi {
     @PostMapping("/send")
     @ApiOperation(value = "发送", notes = "发送")
     public R send(@RequestBody @Valid DialogueSend req) {
+        if(req.getOnlineConsultationId() == null){
+            return R.failed("缺少在线咨询订单id");
+        }
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        dialogueService.sendDialogue(req, false, playerTokenResp.getId(), playerTokenResp.getUsername(),null);
+        dialogueService.sendDialogue(req, false, playerTokenResp.getId(), playerTokenResp.getUsername(),null, null,2);
+        return R.ok(null);
+    }
+
+    @PostMapping("/sendPrescriptionMessage")
+    @ApiOperation(value = "发送处方药咨询消息", notes = "发送处方药咨询消息")
+    public R sendPrescriptionMessage(@RequestBody @Valid DialogueSend req) {
+        if(req.getOnlinePrescriptionId() == null){
+            return R.failed("缺少在线咨询处方药订单id");
+        }
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        dialogueService.sendDialogue(req, false, playerTokenResp.getId(), playerTokenResp.getUsername(),null, null,1);
         return R.ok(null);
     }
 
