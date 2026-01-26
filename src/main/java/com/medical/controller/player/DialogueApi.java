@@ -1,19 +1,17 @@
 package com.medical.controller.player;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
-import com.medical.common.annotation.AdminLoginCheck;
 import com.medical.common.tools.TokenTools;
-import com.medical.entity.Admin;
 import com.medical.entity.Dialogue;
-import com.medical.entity.UserInfo;
 import com.medical.pojo.req.IdBase;
 import com.medical.pojo.req.dialogue.DialoguePage;
-import com.medical.pojo.req.dialogue.DialogueSend;
+import com.medical.pojo.req.dialogue.OnlineConsultationDialogueSend;
+import com.medical.pojo.req.dialogue.OnlinePrescriptionDialogueSend;
 import com.medical.pojo.resp.player.PlayerTokenResp;
 import com.medical.service.AdminService;
 import com.medical.service.DialogueService;
-import com.medical.service.UserInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -46,24 +44,26 @@ public class DialogueApi {
     }
 
     @PostMapping("/send")
-    @ApiOperation(value = "发送", notes = "发送")
-    public R send(@RequestBody @Valid DialogueSend req) {
+    @ApiOperation(value = "发送在线咨询疾病", notes = "发送在线咨询疾病")
+    public R send(@RequestBody @Valid OnlineConsultationDialogueSend req) {
         if(req.getOnlineConsultationId() == null){
             return R.failed("缺少在线咨询订单id");
         }
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        dialogueService.sendDialogue(req, false, playerTokenResp.getId(), playerTokenResp.getUsername(),null, null,2);
+        Dialogue dialogue = BeanUtil.toBean(req, Dialogue.class);
+        dialogueService.sendDialogue(dialogue, false, playerTokenResp.getId(), playerTokenResp.getUsername(),null, null,2);
         return R.ok(null);
     }
 
     @PostMapping("/sendPrescriptionMessage")
     @ApiOperation(value = "发送处方药咨询消息", notes = "发送处方药咨询消息")
-    public R sendPrescriptionMessage(@RequestBody @Valid DialogueSend req) {
+    public R sendPrescriptionMessage(@RequestBody @Valid OnlinePrescriptionDialogueSend req) {
         if(req.getOnlinePrescriptionId() == null){
             return R.failed("缺少在线咨询处方药订单id");
         }
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
-        dialogueService.sendDialogue(req, false, playerTokenResp.getId(), playerTokenResp.getUsername(),null, null,1);
+        Dialogue dialogue = BeanUtil.toBean(req, Dialogue.class);
+        dialogueService.sendDialogue(dialogue, false, playerTokenResp.getId(), playerTokenResp.getUsername(),null, null,1);
         return R.ok(null);
     }
 

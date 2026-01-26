@@ -1,5 +1,6 @@
 package com.medical.controller.manage;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.medical.common.annotation.AdminLoginCheck;
@@ -8,7 +9,8 @@ import com.medical.common.tools.TokenTools;
 import com.medical.entity.*;
 import com.medical.pojo.req.IdBase;
 import com.medical.pojo.req.dialogue.DialoguePage;
-import com.medical.pojo.req.dialogue.DialogueSend;
+import com.medical.pojo.req.dialogue.OnlineConsultationDialogueSend;
+import com.medical.pojo.req.dialogue.OnlinePrescriptionDialogueSend;
 import com.medical.service.DialogueService;
 import com.medical.service.OnlineConsultationService;
 import com.medical.service.OnlinePrescriptionService;
@@ -47,7 +49,7 @@ public class DialogueController {
 
     @PostMapping("/send")
     @ApiOperation(value = "发送", notes = "发送")
-    public R send(@RequestBody @Valid DialogueSend req) {
+    public R send(@RequestBody @Valid OnlineConsultationDialogueSend req) {
         if(req.getOnlineConsultationId() == null){
             return R.failed("缺少在线咨询订单id");
         }
@@ -56,13 +58,15 @@ public class DialogueController {
         if(onlineConsultation == null){
             throw new DataException("未找到在线问诊订单");
         }
-        dialogueService.sendDialogue(req, true, admin.getId(), admin.getName(),onlineConsultation.getUserId(), onlineConsultation.getRealName(), 2);
+
+        Dialogue dialogue = BeanUtil.toBean(req, Dialogue.class);
+        dialogueService.sendDialogue(dialogue, true, admin.getId(), admin.getName(),onlineConsultation.getUserId(), onlineConsultation.getRealName(), 2);
         return R.ok(null);
     }
 
     @PostMapping("/sendPrescriptionMessage")
     @ApiOperation(value = "发送处方药咨询消息", notes = "发送处方药咨询消息")
-    public R sendPrescriptionMessage(@RequestBody @Valid DialogueSend req) {
+    public R sendPrescriptionMessage(@RequestBody @Valid OnlinePrescriptionDialogueSend req) {
         if(req.getOnlinePrescriptionId() == null){
             return R.failed("缺少在线咨询处方药订单id");
         }
@@ -71,7 +75,9 @@ public class DialogueController {
         if(onlinePrescription == null){
             throw new DataException("未找到在线咨询处方药订单");
         }
-        dialogueService.sendDialogue(req, true, admin.getId(), admin.getName(), onlinePrescription.getUserId(), onlinePrescription.getRealName(),1);
+
+        Dialogue dialogue = BeanUtil.toBean(req, Dialogue.class);
+        dialogueService.sendDialogue(dialogue, true, admin.getId(), admin.getName(), onlinePrescription.getUserId(), onlinePrescription.getRealName(),1);
         return R.ok(null);
     }
 

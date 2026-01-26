@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.medical.entity.Dialogue;
 import com.medical.mapper.DialogueMapper;
 import com.medical.pojo.req.dialogue.DialoguePage;
-import com.medical.pojo.req.dialogue.DialogueSend;
+import com.medical.pojo.req.dialogue.OnlineConsultationDialogueSend;
 import com.medical.service.DialogueService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -64,7 +64,7 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
     }
 
     @Override
-    public void sendDialogue(DialogueSend dto, Boolean isAdmin, Long sendId, String sendName,Long receiveId, String receiveName, int business) {
+    public void sendDialogue(Dialogue dto, Boolean isAdmin, Long sendId, String sendName, Long receiveId, String receiveName, int business) {
         Dialogue dialogue = BeanUtil.toBean(dto, Dialogue.class);
         dialogue.setIsRead(Boolean.FALSE);
         dialogue.setIsAdmin(isAdmin);
