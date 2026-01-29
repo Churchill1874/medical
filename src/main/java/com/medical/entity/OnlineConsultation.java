@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * 在线问诊
+ * 在线专家问诊 癌症及重大疾病
  */
 @Data
 @TableName("online_consultation")
@@ -52,5 +52,8 @@ public class OnlineConsultation extends BaseInfo implements Serializable {
 
     @ApiModelProperty("描述")
     private String description;
+
+    @ApiModelProperty("补充信息")
+    private String remark;
 
 }

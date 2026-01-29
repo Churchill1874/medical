@@ -20,7 +20,6 @@ public class OnlineConsultationAdd implements Serializable {
     @ApiModelProperty("出生年月日 如:2000-10-01")
     private LocalDate birthday;
 
-    @NotNull(message = "请输入性别")
     @ApiModelProperty("性别")
     private Integer gender;
 
@@ -42,12 +41,13 @@ public class OnlineConsultationAdd implements Serializable {
     @ApiModelProperty("微信号")
     private String wechat;
 
-    @NotBlank(message = "请输入病情描述")
     @ApiModelProperty("描述")
     private String description;
 
-    @NotBlank(message = "请上传图片")
     @ApiModelProperty("参考资料 (添加图片)")
     private String image;
+
+    @ApiModelProperty("补充信息")
+    private String remark;
 
 }
