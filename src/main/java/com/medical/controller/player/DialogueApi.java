@@ -37,9 +37,7 @@ public class DialogueApi {
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<Dialogue>> page(@RequestBody DialoguePage req) {
-        if(req.getOnlineConsultationId() == null){
-            return R.failed("为关联在线问诊订单");
-        }
+        req.setUserId(TokenTools.getPlayerToken(true).getId());
         return R.ok(dialogueService.queryPage(req));
     }
 

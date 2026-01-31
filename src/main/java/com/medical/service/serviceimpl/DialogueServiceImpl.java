@@ -34,6 +34,7 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
         LambdaQueryWrapper<Dialogue> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
                 .eq(dto.getOnlineConsultationId() != null, Dialogue::getOnlineConsultationId, dto.getOnlineConsultationId())
+                .eq(dto.getOnlinePrescriptionId() != null, Dialogue::getOnlinePrescriptionId, dto.getOnlinePrescriptionId())
                 .eq(dto.getIsRead() != null, Dialogue::getIsRead, dto.getIsRead())
                 .eq(dto.getBusiness() != null, Dialogue::getBusiness, dto.getBusiness())
                 .orderByDesc(Dialogue::getCreateTime);
@@ -77,7 +78,7 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
         dialogue.setReceiveId(receiveId);
         save(dialogue);
 
-        messagingTemplate.convertAndSendToUser(receiveName, "/queue/private", dialogue);
+        //messagingTemplate.convertAndSendToUser(receiveName, "/queue/private", dialogue);
     }
 
     @Async

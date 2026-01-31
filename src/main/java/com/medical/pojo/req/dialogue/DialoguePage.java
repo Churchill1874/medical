@@ -22,6 +22,9 @@ public class DialoguePage extends PageBase implements Serializable {
     @ApiModelProperty("在线问诊表单id 含义:对话属于某个在线问诊提交的病情单子,从问诊单子入口进来看相关聊天")
     private Long onlineConsultationId;
 
+    @ApiModelProperty("在线咨询处方药")
+    private Long onlinePrescriptionId;
+
     @ApiModelProperty("1开处方药 2专家在线问诊")
     private Integer business;
 }
