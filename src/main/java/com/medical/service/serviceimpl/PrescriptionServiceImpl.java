@@ -24,6 +24,7 @@ public class PrescriptionServiceImpl extends ServiceImpl<PrescriptionMapper, Pre
         IPage<Prescription> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
         LambdaQueryWrapper<Prescription> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper
+                .eq(StringUtils.isNotBlank(dto.getWechat()), Prescription::getWechat, dto.getWechat())
                 .eq(dto.getStatus() != null, Prescription::getStatus, dto.getStatus())
                 .eq(dto.getReadStatus() != null, Prescription::getReadStatus, dto.getReadStatus())
                 .eq(dto.getUserId() != null, Prescription::getUserId, dto.getUserId())
@@ -61,6 +62,13 @@ public class PrescriptionServiceImpl extends ServiceImpl<PrescriptionMapper, Pre
                 .set(Prescription::getStatus, status)
                 .eq(Prescription::getId, id);
         update(updateWrapper);
+    }
+
+    @Override
+    public int unfinishedCount() {
+        LambdaQueryWrapper<Prescription> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ne(Prescription::getStatus, 2);
+        return count(queryWrapper);
     }
 
 

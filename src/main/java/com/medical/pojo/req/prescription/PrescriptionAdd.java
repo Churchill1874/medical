@@ -52,4 +52,6 @@ public class PrescriptionAdd implements Serializable {
     @ApiModelProperty("收件地址邮编")
     private String postCode;
 
+    @ApiModelProperty("微信号")
+    private String wechat;
 }

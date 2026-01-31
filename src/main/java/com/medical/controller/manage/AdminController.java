@@ -9,9 +9,9 @@ import com.medical.common.tools.HttpTools;
 import com.medical.entity.Admin;
 import com.medical.pojo.req.admin.AdminLogin;
 import com.medical.pojo.req.admin.AdminPage;
+import com.medical.pojo.resp.admin.UnfinishCountReport;
 import com.medical.pojo.resp.verification.VerificationCodeResp;
-import com.medical.service.AdminService;
-import com.medical.service.EhcacheService;
+import com.medical.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 @Slf4j
@@ -30,10 +31,31 @@ import javax.validation.Valid;
 @RequestMapping("/manage/admin")
 public class AdminController {
 
+    @Resource
+    private OfflineTranslationService offlineTranslationService;
+    @Resource
+    private OnlinePrescriptionService onlinePrescriptionService;
+    @Resource
+    private OnlineConsultationService onlineConsultationService;
+    @Resource
+    private PrescriptionService prescriptionService;
+
     @Autowired
     private AdminService adminService;
     @Autowired
     private EhcacheService ehcacheService;
+
+    @PostMapping("/unfinishCount")
+    @ApiOperation(value = "统计未完成的订单数量", notes = "统计未完成的订单数量")
+    public R<UnfinishCountReport> unfinishCount() {
+        UnfinishCountReport unfinishCountReport = new UnfinishCountReport();
+        unfinishCountReport.setPrescriptionCount(prescriptionService.unfinishedCount());
+        unfinishCountReport.setOnlineConsultationCount(onlineConsultationService.unfinishedCount());
+        unfinishCountReport.setOffTranslationCount(offlineTranslationService.unfinishedCount());
+        unfinishCountReport.setOnlinePrescriptionCount(onlinePrescriptionService.unfinishedCount());
+        return R.ok(unfinishCountReport);
+    }
+
 
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")

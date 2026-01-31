@@ -44,6 +44,9 @@ public class DialogueController {
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<Dialogue>> page(@RequestBody DialoguePage req) {
+        if(req.getOnlineConsultationId() == null && req.getOnlinePrescriptionId() == null){
+            throw new DataException("请输入在线问诊id或者处方药咨询id");
+        }
         return R.ok(dialogueService.queryPage(req));
     }
 

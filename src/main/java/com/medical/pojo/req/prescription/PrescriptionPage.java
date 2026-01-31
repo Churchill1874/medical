@@ -24,5 +24,7 @@ public class PrescriptionPage extends PageBase implements Serializable {
     private String username;
     @ApiModelProperty("收件人手机号")
     private String mobile;
+    @ApiModelProperty("微信号")
+    private String wechat;
 
 }

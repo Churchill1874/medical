@@ -67,5 +67,8 @@ public class Prescription extends BaseInfo implements Serializable {
     @ApiModelProperty("邮箱")
     private String email;
 
+    @ApiModelProperty("微信号")
+    private String wechat;
+
 
 }

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.medical.common.tools.TokenTools;
 import com.medical.entity.OfflineTranslation;
+import com.medical.entity.OnlineConsultation;
 import com.medical.mapper.OfflineTranslationMapper;
 import com.medical.pojo.req.offlinetranslation.OfflineTranslationPage;
 import com.medical.pojo.resp.player.PlayerTokenResp;
@@ -64,6 +65,13 @@ public class OfflineTranslationServiceImpl extends ServiceImpl<OfflineTranslatio
     @Override
     public void deleteById(Long id) {
         removeById(id);
+    }
+
+    @Override
+    public int unfinishedCount() {
+        LambdaQueryWrapper<OfflineTranslation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ne(OfflineTranslation::getStatus, 2);
+        return count(queryWrapper);
     }
 
 

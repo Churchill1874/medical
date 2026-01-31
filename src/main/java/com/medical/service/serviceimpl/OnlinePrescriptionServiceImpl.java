@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.medical.common.tools.TokenTools;
 import com.medical.entity.OnlinePrescription;
+import com.medical.entity.Prescription;
 import com.medical.mapper.OnlinePrescriptionMapper;
 import com.medical.pojo.req.onlineprescription.OnlinePrescriptionAdd;
 import com.medical.pojo.req.onlineprescription.OnlinePrescriptionPage;
@@ -62,6 +63,13 @@ public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptio
     @Override
     public void deleteOnlinePrescription(Long id) {
         removeById(id);
+    }
+
+    @Override
+    public int unfinishedCount() {
+        LambdaQueryWrapper<OnlinePrescription> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ne(OnlinePrescription::getStatus, 2);
+        return count(queryWrapper);
     }
 
 }

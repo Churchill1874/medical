@@ -14,4 +14,6 @@ public interface OfflineTranslationService extends IService<OfflineTranslation> 
     void updateStatus(Long id, String status);
 
     void deleteById(Long id);
+
+    int unfinishedCount();
 }
