@@ -16,5 +16,5 @@ public interface OnlineConsultationService extends IService<OnlineConsultation> 
 
     void deleteById(Long id);
 
-    int unfinishedCount();
+    int unfinishedCount(Long userId);
 }

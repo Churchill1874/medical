@@ -15,5 +15,5 @@ public interface OfflineTranslationService extends IService<OfflineTranslation> 
 
     void deleteById(Long id);
 
-    int unfinishedCount();
+    int unfinishedCount(Long userId);
 }

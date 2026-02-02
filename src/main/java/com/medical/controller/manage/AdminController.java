@@ -49,10 +49,10 @@ public class AdminController {
     @ApiOperation(value = "统计未完成的订单数量", notes = "统计未完成的订单数量")
     public R<UnfinishCountReport> unfinishCount() {
         UnfinishCountReport unfinishCountReport = new UnfinishCountReport();
-        unfinishCountReport.setPrescriptionCount(prescriptionService.unfinishedCount());
-        unfinishCountReport.setOnlineConsultationCount(onlineConsultationService.unfinishedCount());
-        unfinishCountReport.setOffTranslationCount(offlineTranslationService.unfinishedCount());
-        unfinishCountReport.setOnlinePrescriptionCount(onlinePrescriptionService.unfinishedCount());
+        unfinishCountReport.setPrescriptionCount(prescriptionService.unfinishedCount(null));
+        unfinishCountReport.setOnlineConsultationCount(onlineConsultationService.unfinishedCount(null));
+        unfinishCountReport.setOffTranslationCount(offlineTranslationService.unfinishedCount(null));
+        unfinishCountReport.setOnlinePrescriptionCount(onlinePrescriptionService.unfinishedCount(null));
         return R.ok(unfinishCountReport);
     }
 

@@ -12,7 +12,7 @@ public class UserLoginReq implements Serializable {
     private static final long serialVersionUID = -713458171533157118L;
 
     @NotBlank(message = "账号不能为空")
-    @Length(min = 8, max = 20, message = "账号长度8-20位之间")
+    @Length(min = 4, max = 20, message = "账号长度8-20位之间")
     @ApiModelProperty("账号")
     private String username;
 

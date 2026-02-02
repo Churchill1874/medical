@@ -18,5 +18,5 @@ public interface OnlinePrescriptionService extends IService<OnlinePrescription> 
 
     void deleteOnlinePrescription(Long id);
 
-    int unfinishedCount();
+    int unfinishedCount(Long userId);
 }

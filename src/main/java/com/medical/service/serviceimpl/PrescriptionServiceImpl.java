@@ -65,9 +65,10 @@ public class PrescriptionServiceImpl extends ServiceImpl<PrescriptionMapper, Pre
     }
 
     @Override
-    public int unfinishedCount() {
+    public int unfinishedCount(Long userId) {
         LambdaQueryWrapper<Prescription> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.ne(Prescription::getStatus, 2);
+        queryWrapper.eq(userId != null, Prescription::getUserId, userId);
         return count(queryWrapper);
     }
 

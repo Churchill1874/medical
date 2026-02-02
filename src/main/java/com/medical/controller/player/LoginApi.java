@@ -5,18 +5,14 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.medical.common.exception.AccountOrPasswordException;
 import com.medical.common.exception.DataException;
-import com.medical.common.tools.CheckReqTools;
-import com.medical.common.tools.CodeTools;
-import com.medical.common.tools.GenerateTools;
-import com.medical.common.tools.HttpTools;
+import com.medical.common.tools.*;
 import com.medical.entity.Admin;
 import com.medical.entity.UserInfo;
 import com.medical.pojo.req.player.UserInfoAdd;
 import com.medical.pojo.req.player.UserLoginReq;
+import com.medical.pojo.resp.admin.UnfinishCountReport;
 import com.medical.pojo.resp.player.PlayerTokenResp;
-import com.medical.service.AdminService;
-import com.medical.service.EhcacheService;
-import com.medical.service.UserInfoService;
+import com.medical.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -37,13 +33,30 @@ public class LoginApi {
 
     @Resource
     private UserInfoService userInfoService;
-
     @Resource
     private EhcacheService ehcacheService;
-
     @Resource
     private AdminService adminService;
+    @Resource
+    private OfflineTranslationService offlineTranslationService;
+    @Resource
+    private OnlinePrescriptionService onlinePrescriptionService;
+    @Resource
+    private OnlineConsultationService onlineConsultationService;
+    @Resource
+    private PrescriptionService prescriptionService;
 
+    @PostMapping("/unfinishCount")
+    @ApiOperation(value = "统计未完成的订单数量", notes = "统计未完成的订单数量")
+    public R<UnfinishCountReport> unfinishCount() {
+        Long userId = TokenTools.getPlayerToken(true).getId();
+        UnfinishCountReport unfinishCountReport = new UnfinishCountReport();
+        unfinishCountReport.setPrescriptionCount(prescriptionService.unfinishedCount(userId));
+        unfinishCountReport.setOnlineConsultationCount(onlineConsultationService.unfinishedCount(userId));
+        unfinishCountReport.setOffTranslationCount(offlineTranslationService.unfinishedCount(userId));
+        unfinishCountReport.setOnlinePrescriptionCount(onlinePrescriptionService.unfinishedCount(userId));
+        return R.ok(unfinishCountReport);
+    }
 
     @PostMapping("/register")
     @ApiOperation(value = "注册", notes = "注册")

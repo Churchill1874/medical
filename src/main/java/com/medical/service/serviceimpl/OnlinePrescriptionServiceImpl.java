@@ -66,9 +66,10 @@ public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptio
     }
 
     @Override
-    public int unfinishedCount() {
+    public int unfinishedCount(Long userId) {
         LambdaQueryWrapper<OnlinePrescription> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.ne(OnlinePrescription::getStatus, 2);
+        queryWrapper.eq(userId != null, OnlinePrescription::getUserId, userId);
         return count(queryWrapper);
     }
 

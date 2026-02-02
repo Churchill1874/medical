@@ -65,9 +65,10 @@ public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultatio
     }
 
     @Override
-    public int unfinishedCount() {
+    public int unfinishedCount(Long userId) {
         LambdaQueryWrapper<OnlineConsultation> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.ne(OnlineConsultation::getStatus, 2);
+        queryWrapper.eq(userId != null, OnlineConsultation::getUserId, userId);
         return count(queryWrapper);
     }
 

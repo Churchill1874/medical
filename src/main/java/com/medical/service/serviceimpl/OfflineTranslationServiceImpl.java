@@ -68,9 +68,10 @@ public class OfflineTranslationServiceImpl extends ServiceImpl<OfflineTranslatio
     }
 
     @Override
-    public int unfinishedCount() {
+    public int unfinishedCount(Long userId) {
         LambdaQueryWrapper<OfflineTranslation> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.ne(OfflineTranslation::getStatus, 2);
+        queryWrapper.eq(userId != null, OfflineTranslation::getUserId, userId);
         return count(queryWrapper);
     }
 

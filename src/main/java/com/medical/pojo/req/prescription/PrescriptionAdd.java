@@ -31,9 +31,7 @@ public class PrescriptionAdd implements Serializable {
     @ApiModelProperty(value = "指定取药局(谷歌定位图片)", required = true)
     private String googleImage;
     @NotBlank(message = "请输入联系电话")
-    @ApiModelProperty(value = "联系电话", required = true)
     private String phone;
-    @NotBlank(message = "请输入邮箱")
     @ApiModelProperty(value = "邮箱", required = true)
     private String email;
 
