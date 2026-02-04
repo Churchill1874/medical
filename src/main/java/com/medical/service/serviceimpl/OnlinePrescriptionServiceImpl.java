@@ -36,7 +36,7 @@ public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptio
     }
 
     @Override
-    public Long addOnlinePrescription(OnlinePrescriptionAdd onlinePrescriptionAdd) {
+    public OnlinePrescription addOnlinePrescription(OnlinePrescriptionAdd onlinePrescriptionAdd) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         OnlinePrescription onlinePrescription = BeanUtil.toBean(onlinePrescriptionAdd, OnlinePrescription.class);
         onlinePrescription.setCreateName(playerTokenResp.getRealName());
@@ -45,7 +45,7 @@ public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptio
         onlinePrescription.setAccount(playerTokenResp.getUsername());
         onlinePrescription.setStatus(0);
         save(onlinePrescription);
-        return onlinePrescription.getId();
+        return onlinePrescription;
     }
 
     @Override

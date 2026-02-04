@@ -34,12 +34,12 @@ public class OnlinePrescriptionApi {
 
     @PostMapping("/addOnlinePrescription")
     @ApiOperation(value = "提交咨询处方药订单", notes = "提交咨询处方药订单")
-    public R<Long> addOnlinePrescription(@RequestBody @Valid OnlinePrescriptionAdd req) {
+    public R<OnlinePrescription> addOnlinePrescription(@RequestBody @Valid OnlinePrescriptionAdd req) {
         if(StringUtils.isBlank(req.getPhone())){
             return R.failed("请填写联系电话");
         }
-        Long id = onlinePrescriptionService.addOnlinePrescription(req);
-        return R.ok(id);
+        OnlinePrescription onlinePrescription = onlinePrescriptionService.addOnlinePrescription(req);
+        return R.ok(onlinePrescription);
     }
 
     @PostMapping("/queryPage")

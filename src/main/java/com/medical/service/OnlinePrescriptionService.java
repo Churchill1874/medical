@@ -12,7 +12,7 @@ public interface OnlinePrescriptionService extends IService<OnlinePrescription> 
 
     IPage<OnlinePrescription> queryPage(OnlinePrescriptionPage onlinePrescriptionPage, Long userId);
 
-    Long addOnlinePrescription(OnlinePrescriptionAdd onlinePrescriptionAdd);
+    OnlinePrescription addOnlinePrescription(OnlinePrescriptionAdd onlinePrescriptionAdd);
 
     void updateStatus(OnlinePrescriptionUpdateStatus onlinePrescriptionUpdateStatus);
 
