@@ -12,6 +12,7 @@ import com.medical.pojo.req.dialogue.OnlinePrescriptionDialogueSend;
 import com.medical.pojo.resp.player.PlayerTokenResp;
 import com.medical.service.AdminService;
 import com.medical.service.DialogueService;
+import com.medical.service.NewMessageService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,15 +31,24 @@ import javax.validation.Valid;
 public class DialogueApi {
 
     @Resource
-    private AdminService adminService;
-    @Resource
     private DialogueService dialogueService;
 
     @PostMapping("/page")
     @ApiOperation(value = "分页查询", notes = "分页查询")
     public R<IPage<Dialogue>> page(@RequestBody DialoguePage req) {
-        req.setUserId(TokenTools.getPlayerToken(true).getId());
-        return R.ok(dialogueService.queryPage(req));
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        req.setUserId(playerTokenResp.getId());
+
+        IPage<Dialogue> iPage = dialogueService.queryPage(req);
+
+        if( req.getOnlineConsultationId() != null ){
+            dialogueService.readOnlineConsultationAll(req.getOnlineConsultationId(), playerTokenResp.getId());
+        }
+        if( req.getOnlinePrescriptionId() != null ){
+            dialogueService.readOnlinePrescriptionAll(req.getOnlinePrescriptionId(), playerTokenResp.getId());
+        }
+
+        return R.ok(iPage);
     }
 
     @PostMapping("/send")

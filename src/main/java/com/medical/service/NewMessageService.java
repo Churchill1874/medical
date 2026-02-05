@@ -2,6 +2,7 @@ package com.medical.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.medical.entity.NewMessage;
+import com.medical.pojo.resp.admin.UnfinishCountReport;
 
 import java.util.List;
 import java.util.Set;
@@ -14,4 +15,5 @@ public interface NewMessageService extends IService<NewMessage> {
 
     void deleteNewMessage(Integer type, String medicalType, Long orderId, Long userId);
 
+    UnfinishCountReport unfinishCountReport(Long userId);
 }

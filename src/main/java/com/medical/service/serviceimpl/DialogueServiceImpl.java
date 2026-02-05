@@ -11,11 +11,13 @@ import com.medical.mapper.DialogueMapper;
 import com.medical.pojo.req.dialogue.DialoguePage;
 import com.medical.pojo.req.dialogue.OnlineConsultationDialogueSend;
 import com.medical.service.DialogueService;
+import com.medical.service.NewMessageService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 @Service
@@ -26,6 +28,9 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
     public DialogueServiceImpl(SimpMessagingTemplate messagingTemplate) {
         this.messagingTemplate = messagingTemplate;
     }
+
+    @Resource
+    private NewMessageService newMessageService;
 
     @Override
     public IPage<Dialogue> queryPage(DialoguePage dto) {
@@ -79,6 +84,15 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
         save(dialogue);
 
         //messagingTemplate.convertAndSendToUser(receiveName, "/queue/private", dialogue);
+
+        Long orderId = null;
+        if(dialogue.getOnlineConsultationId() != null){
+            orderId = dialogue.getOnlineConsultationId();
+        }
+        if(dialogue.getOnlinePrescriptionId() != null){
+            orderId = dialogue.getOnlinePrescriptionId();
+        }
+        newMessageService.addNewMessage(1, null, "新对话信息", orderId, receiveId, sendName);
     }
 
     @Async
@@ -95,6 +109,32 @@ public class DialogueServiceImpl extends ServiceImpl<DialogueMapper, Dialogue> i
     @Override
     public void deleteById(Long id) {
         removeById(id);
+    }
+
+    @Override
+    public void readOnlineConsultationAll(Long id, Long receiveId) {
+        LambdaUpdateWrapper<Dialogue> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper
+                .set(Dialogue::getIsRead, Boolean.TRUE)
+                .set(Dialogue::getReadTime, LocalDateTime.now())
+                .eq(Dialogue::getReceiveId, receiveId)
+                .eq(Dialogue::getOnlineConsultationId, id);
+        update(updateWrapper);
+
+        newMessageService.deleteNewMessage(1,null, id, receiveId);
+    }
+
+    @Override
+    public void readOnlinePrescriptionAll(Long id, Long receiveId) {
+        LambdaUpdateWrapper<Dialogue> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper
+                .set(Dialogue::getIsRead, Boolean.TRUE)
+                .set(Dialogue::getReadTime, LocalDateTime.now())
+                .eq(Dialogue::getReceiveId, receiveId)
+                .eq(Dialogue::getOnlinePrescriptionId, id);
+        update(updateWrapper);
+
+        newMessageService.deleteNewMessage(1,null, id, receiveId);
     }
 
 

@@ -16,4 +16,8 @@ public interface DialogueService extends IService<Dialogue> {
 
     void deleteById(Long id);
 
+    void readOnlineConsultationAll(Long id , Long receiveId);
+
+    void readOnlinePrescriptionAll(Long id, Long receiveId);
+
 }

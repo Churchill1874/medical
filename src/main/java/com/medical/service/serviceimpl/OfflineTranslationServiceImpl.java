@@ -96,7 +96,7 @@ public class OfflineTranslationServiceImpl extends ServiceImpl<OfflineTranslatio
     @Override
     public OfflineTranslation findById(Long id, Long userId) {
         OfflineTranslation offlineTranslation = getById(id);
-        newMessageService.deleteNewMessage(4,offlineTranslation.getMedicalType(), id, userId);
+        newMessageService.deleteNewMessage(4, offlineTranslation.getMedicalType(), id, userId);
         return offlineTranslation;
     }
 

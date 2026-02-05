@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Sets;
 import com.medical.entity.NewMessage;
 import com.medical.mapper.NewMessageMapper;
+import com.medical.pojo.resp.admin.UnfinishCountReport;
 import com.medical.service.NewMessageService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.scheduling.annotation.Async;
@@ -69,6 +70,36 @@ public class NewMessageServiceImpl extends ServiceImpl<NewMessageMapper, NewMess
         queryWrapper.eq(NewMessage::getType, type);
         queryWrapper.eq(StringUtils.isNotBlank(medicalType), NewMessage::getMedicalType, medicalType);
         remove(queryWrapper);
+    }
+
+    @Override
+    public UnfinishCountReport unfinishCountReport(Long userId) {
+        UnfinishCountReport report = new UnfinishCountReport();
+
+        LambdaQueryWrapper<NewMessage> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(NewMessage::getUserId, userId);
+        List<NewMessage> newMessageList = list(queryWrapper);
+
+        if(CollectionUtils.isEmpty(newMessageList)){
+            return report;
+        }
+
+        for(NewMessage newMessage : newMessageList){
+            if(newMessage.getType() == 2){
+                report.setPrescriptionCount(report.getPrescriptionCount() + 1);
+            }
+            if(newMessage.getType() == 3){
+                report.setOnlinePrescriptionCount(report.getOnlinePrescriptionCount() + 1);
+            }
+            if(newMessage.getType() == 4){
+                report.setOffTranslationCount(report.getOffTranslationCount() + 1);
+            }
+            if(newMessage.getType() == 5){
+                report.setOnlineConsultationCount(report.getOnlineConsultationCount() + 1);
+            }
+        }
+
+        return report;
     }
 
 

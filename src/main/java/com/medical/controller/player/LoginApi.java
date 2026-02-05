@@ -32,19 +32,13 @@ import java.time.LocalDateTime;
 public class LoginApi {
 
     @Resource
+    private NewMessageService newMessageService;
+    @Resource
     private UserInfoService userInfoService;
     @Resource
     private EhcacheService ehcacheService;
     @Resource
     private AdminService adminService;
-    @Resource
-    private OfflineTranslationService offlineTranslationService;
-    @Resource
-    private OnlinePrescriptionService onlinePrescriptionService;
-    @Resource
-    private OnlineConsultationService onlineConsultationService;
-    @Resource
-    private PrescriptionService prescriptionService;
 
     @PostMapping("/getPlayerToken")
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
@@ -54,14 +48,10 @@ public class LoginApi {
     }
 
     @PostMapping("/unfinishCount")
-    @ApiOperation(value = "统计未完成的订单数量", notes = "统计未完成的订单数量")
+    @ApiOperation(value = "统计未读取新消息订单数量", notes = "统计未读取新消息订单数量")
     public R<UnfinishCountReport> unfinishCount() {
         Long userId = TokenTools.getPlayerToken(true).getId();
-        UnfinishCountReport unfinishCountReport = new UnfinishCountReport();
-        unfinishCountReport.setPrescriptionCount(prescriptionService.unfinishedCount(userId));
-        unfinishCountReport.setOnlineConsultationCount(onlineConsultationService.unfinishedCount(userId));
-        unfinishCountReport.setOffTranslationCount(offlineTranslationService.unfinishedCount(userId));
-        unfinishCountReport.setOnlinePrescriptionCount(onlinePrescriptionService.unfinishedCount(userId));
+        UnfinishCountReport unfinishCountReport = newMessageService.unfinishCountReport(userId);
         return R.ok(unfinishCountReport);
     }
 
