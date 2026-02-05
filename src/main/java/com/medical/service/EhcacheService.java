@@ -56,7 +56,7 @@ public interface EhcacheService {
      * @param limitCount
      * @return
      */
-    void checkIp3SecondsClick(String ip,Integer limitCount, String remarks);
+    void checkIp2SecondsClick(String ip,Integer limitCount, String remarks);
 
     /**
      * 清理ip黑名单缓存

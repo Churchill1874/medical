@@ -4,25 +4,37 @@ import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Sets;
 import com.medical.common.tools.TokenTools;
+import com.medical.entity.Dialogue;
 import com.medical.entity.OnlineConsultation;
 import com.medical.entity.OnlinePrescription;
+import com.medical.mapper.DialogueMapper;
 import com.medical.mapper.OnlineConsultationMapper;
 import com.medical.pojo.req.onlineconsultation.OnlineConsultationAdd;
 import com.medical.pojo.req.onlineconsultation.OnlineConsultationPage;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.NewMessageService;
 import com.medical.service.OnlineConsultationService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultationMapper, OnlineConsultation> implements OnlineConsultationService {
+
+    @Resource
+    private NewMessageService newMessageService;
 
     @Override
     public IPage<OnlineConsultation> queryPage(OnlineConsultationPage dto, Long userId) {
@@ -37,7 +49,7 @@ public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultatio
     }
 
     @Override
-    public Long addOnlineConsultation(OnlineConsultationAdd dto) {
+    public OnlineConsultation addOnlineConsultation(OnlineConsultationAdd dto) {
         PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
         OnlineConsultation onlineConsultation = BeanUtil.toBean(dto, OnlineConsultation.class);
         onlineConsultation.setStatus(0);
@@ -46,7 +58,7 @@ public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultatio
         onlineConsultation.setCreateTime(LocalDateTime.now());
         this.save(onlineConsultation);
 
-        return onlineConsultation.getId();
+        return onlineConsultation;
     }
 
     @Override
@@ -57,6 +69,10 @@ public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultatio
                 .set(OnlineConsultation::getStatus, status)
                 .eq(OnlineConsultation::getId, id);
         this.update(updateWrapper);
+
+        OnlineConsultation onlineConsultation = getById(id);
+
+        newMessageService.addNewMessage(5, null, "重大疾病在线咨询问诊订单状态变化" + status, id, onlineConsultation.getUserId(), adminName);
     }
 
     @Override
@@ -71,5 +87,13 @@ public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultatio
         queryWrapper.eq(userId != null, OnlineConsultation::getUserId, userId);
         return count(queryWrapper);
     }
+
+    @Override
+    public OnlineConsultation findById(Long id, Long userId) {
+        OnlineConsultation onlineConsultation = getById(id);
+        newMessageService.deleteNewMessage(5, null, id, userId);
+        return onlineConsultation;
+    }
+
 
 }

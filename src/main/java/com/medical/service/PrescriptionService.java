@@ -14,4 +14,6 @@ public interface PrescriptionService extends IService<Prescription> {
     void updateStatus(Long id, Integer status, String remark);
 
     int unfinishedCount(Long userId);
+
+    Prescription findById(Long id, Long userId);
 }

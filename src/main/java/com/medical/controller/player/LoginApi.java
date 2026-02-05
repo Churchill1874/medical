@@ -46,6 +46,13 @@ public class LoginApi {
     @Resource
     private PrescriptionService prescriptionService;
 
+    @PostMapping("/getPlayerToken")
+    @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
+    public R<PlayerTokenResp> getPlayerToken() {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        return R.ok(playerTokenResp);
+    }
+
     @PostMapping("/unfinishCount")
     @ApiOperation(value = "统计未完成的订单数量", notes = "统计未完成的订单数量")
     public R<UnfinishCountReport> unfinishCount() {

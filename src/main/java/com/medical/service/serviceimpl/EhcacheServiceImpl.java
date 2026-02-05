@@ -27,7 +27,7 @@ public class EhcacheServiceImpl implements EhcacheService {
     private CacheManager cacheManager;
 
     @Override
-    public void checkIp3SecondsClick(String ip, Integer limitCount, String remarks) {
+    public void checkIp2SecondsClick(String ip, Integer limitCount, String remarks) {
         Cache<String, Integer> cache = lock3SecondCache();
         Integer reqCount = cache.get(ip);
 

@@ -28,10 +28,12 @@ public class BlacklistCheckAspect {
     @Before("blacklistPointCut()")
     public void beforeExecute() {
         String ip = HttpTools.getIp();
+        log.info("拦截器观察ip-地址:{}", ip);
         if ("127.0.0.1".equals(ip) || "::1".equals(ip)) {
             return;
         }
         if ("OPTIONS".equalsIgnoreCase(HttpTools.getRequest().getMethod())) {
+            log.info("拦截器拦截ip-进入OPTIONS:{}", ip);
             return;
         }
 

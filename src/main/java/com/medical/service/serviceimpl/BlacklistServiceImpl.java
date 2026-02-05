@@ -81,7 +81,7 @@ public class BlacklistServiceImpl extends ServiceImpl<BlacklistMapper, Blacklist
     @Override
     public void checkIp(String ip) {
         try {
-            ehcacheService.checkIp3SecondsClick(ip, 100, "ip暴力访问:" + ip);
+            ehcacheService.checkIp2SecondsClick(ip, 100, "ip暴力访问:" + ip);
         } catch (IpException e) {
             Blacklist blacklist = new Blacklist();
             blacklist.setIp(ip);

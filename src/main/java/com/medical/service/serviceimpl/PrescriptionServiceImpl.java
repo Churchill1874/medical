@@ -6,18 +6,24 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.medical.common.tools.TokenTools;
+import com.medical.entity.Admin;
 import com.medical.entity.Prescription;
 import com.medical.mapper.PrescriptionMapper;
 import com.medical.pojo.req.prescription.PrescriptionPage;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.NewMessageService;
 import com.medical.service.PrescriptionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 @Service
 public class PrescriptionServiceImpl extends ServiceImpl<PrescriptionMapper, Prescription> implements PrescriptionService {
+
+    @Resource
+    private NewMessageService newMessageService;
 
     @Override
     public IPage<Prescription> queryPage(PrescriptionPage dto) {
@@ -53,15 +59,20 @@ public class PrescriptionServiceImpl extends ServiceImpl<PrescriptionMapper, Pre
 
     @Override
     public void updateStatus(Long id, Integer status, String remark) {
+        Admin admin = TokenTools.getAdminToken(true);
         UpdateWrapper<Prescription> updateWrapper = new UpdateWrapper<>();
         updateWrapper
                 .lambda()
-                .set(Prescription::getUpdateName, TokenTools.getAdminToken(true).getName())
+                .set(Prescription::getUpdateName, admin.getName())
                 .set(Prescription::getUpdateTime, LocalDateTime.now())
                 .set(Prescription::getRemark, remark)
                 .set(Prescription::getStatus, status)
                 .eq(Prescription::getId, id);
         update(updateWrapper);
+
+        Prescription prescription = getById(id);
+
+        newMessageService.addNewMessage(2, null,"开处方药订单状态变化" + status, id,prescription.getUserId(), admin.getName());
     }
 
     @Override
@@ -70,6 +81,13 @@ public class PrescriptionServiceImpl extends ServiceImpl<PrescriptionMapper, Pre
         queryWrapper.ne(Prescription::getStatus, 2);
         queryWrapper.eq(userId != null, Prescription::getUserId, userId);
         return count(queryWrapper);
+    }
+
+    @Override
+    public Prescription findById(Long id, Long userId) {
+        Prescription prescription = getById(id);
+        newMessageService.deleteNewMessage(2, null,prescription.getId(),userId);
+        return prescription;
     }
 
 

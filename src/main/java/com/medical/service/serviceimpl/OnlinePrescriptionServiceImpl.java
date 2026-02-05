@@ -7,21 +7,26 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.medical.common.tools.TokenTools;
+import com.medical.entity.Admin;
 import com.medical.entity.OnlinePrescription;
-import com.medical.entity.Prescription;
 import com.medical.mapper.OnlinePrescriptionMapper;
 import com.medical.pojo.req.onlineprescription.OnlinePrescriptionAdd;
 import com.medical.pojo.req.onlineprescription.OnlinePrescriptionPage;
 import com.medical.pojo.req.onlineprescription.OnlinePrescriptionUpdateStatus;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.NewMessageService;
 import com.medical.service.OnlinePrescriptionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 @Service
 public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptionMapper, OnlinePrescription> implements OnlinePrescriptionService {
+
+    @Resource
+    private NewMessageService newMessageService;
 
     @Override
     public IPage<OnlinePrescription> queryPage(OnlinePrescriptionPage onlinePrescriptionPage, Long userId) {
@@ -50,14 +55,19 @@ public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptio
 
     @Override
     public void updateStatus(OnlinePrescriptionUpdateStatus onlinePrescriptionUpdateStatus) {
+        Admin admin = TokenTools.getAdminToken(true);
         LambdaUpdateWrapper<OnlinePrescription> updateWrapper = new LambdaUpdateWrapper<>();
         updateWrapper
                 .set(OnlinePrescription::getStatus, onlinePrescriptionUpdateStatus.getStatus())
                 .set(OnlinePrescription::getUpdateTime, LocalDateTime.now())
-                .set(OnlinePrescription::getUpdateName, TokenTools.getAdminToken(true).getName())
+                .set(OnlinePrescription::getUpdateName, admin.getName())
                 .set(OnlinePrescription::getReason, onlinePrescriptionUpdateStatus.getReason())
                 .eq(OnlinePrescription::getId, onlinePrescriptionUpdateStatus.getId());
         update(updateWrapper);
+
+        OnlinePrescription onlinePrescription = getById(onlinePrescriptionUpdateStatus.getId());
+        String statusStr = "在线咨询处方药订单状态变化" + onlinePrescriptionUpdateStatus.getStatus();
+        newMessageService.addNewMessage(3,null, statusStr, onlinePrescription.getId(), onlinePrescription.getUserId(), admin.getName());
     }
 
     @Override
@@ -71,6 +81,13 @@ public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptio
         queryWrapper.ne(OnlinePrescription::getStatus, 2);
         queryWrapper.eq(userId != null, OnlinePrescription::getUserId, userId);
         return count(queryWrapper);
+    }
+
+    @Override
+    public OnlinePrescription findById(Long id, Long  userId) {
+        OnlinePrescription onlinePrescription = getById(id);
+        newMessageService.deleteNewMessage(3, null, onlinePrescription.getId(),userId);
+        return onlinePrescription;
     }
 
 }
