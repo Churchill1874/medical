@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Sets;
 import com.medical.common.tools.TokenTools;
+import com.medical.config.InitConfig;
+import com.medical.entity.Admin;
 import com.medical.entity.Dialogue;
 import com.medical.entity.OnlineConsultation;
 import com.medical.entity.OnlinePrescription;
@@ -17,6 +19,7 @@ import com.medical.mapper.OnlineConsultationMapper;
 import com.medical.pojo.req.onlineconsultation.OnlineConsultationAdd;
 import com.medical.pojo.req.onlineconsultation.OnlineConsultationPage;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.AdminService;
 import com.medical.service.NewMessageService;
 import com.medical.service.OnlineConsultationService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +36,8 @@ import java.util.stream.Collectors;
 @Service
 public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultationMapper, OnlineConsultation> implements OnlineConsultationService {
 
+    @Resource
+    private AdminService adminService;
     @Resource
     private NewMessageService newMessageService;
 
@@ -58,6 +63,15 @@ public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultatio
         onlineConsultation.setCreateTime(LocalDateTime.now());
         this.save(onlineConsultation);
 
+/*        Admin admin = adminService.findByAccount(InitConfig.SUPER_ADMIN_ACCOUNT);
+        newMessageService.addNewMessage(
+                5,
+                null,
+                "重大疾病咨询,用户:"+playerTokenResp.getUsername(),
+                onlineConsultation.getId(),
+                admin.getId(),
+                playerTokenResp.getUsername()
+        );*/
         return onlineConsultation;
     }
 

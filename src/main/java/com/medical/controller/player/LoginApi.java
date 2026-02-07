@@ -16,6 +16,7 @@ import com.medical.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.ehcache.Cache;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,6 +41,17 @@ public class LoginApi {
     @Resource
     private AdminService adminService;
 
+    @PostMapping("/logout")
+    @ApiOperation(value = "退出登录", notes = "退出登录")
+    public R logout() {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+
+        Cache<String, PlayerTokenResp> cache = ehcacheService.playerTokenCache();
+        cache.remove(playerTokenResp.getTokenId());
+
+        return R.ok(null);
+    }
+
     @PostMapping("/getPlayerToken")
     @ApiOperation(value = "获取用户信息", notes = "获取用户信息")
     public R<PlayerTokenResp> getPlayerToken() {
@@ -50,8 +62,15 @@ public class LoginApi {
     @PostMapping("/unfinishCount")
     @ApiOperation(value = "统计未读取新消息订单数量", notes = "统计未读取新消息订单数量")
     public R<UnfinishCountReport> unfinishCount() {
-        Long userId = TokenTools.getPlayerToken(true).getId();
-        UnfinishCountReport unfinishCountReport = newMessageService.unfinishCountReport(userId);
+
+        UnfinishCountReport unfinishCountReport = new UnfinishCountReport();
+
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(false);
+        if(playerTokenResp == null){
+            return R.ok(unfinishCountReport);
+        }
+
+        unfinishCountReport = newMessageService.unfinishCountReport(playerTokenResp.getId());
         return R.ok(unfinishCountReport);
     }
 

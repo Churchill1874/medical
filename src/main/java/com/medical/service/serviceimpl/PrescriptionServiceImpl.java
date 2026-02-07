@@ -6,13 +6,17 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.medical.common.tools.TokenTools;
+import com.medical.config.InitConfig;
 import com.medical.entity.Admin;
 import com.medical.entity.Prescription;
+import com.medical.entity.UserInfo;
 import com.medical.mapper.PrescriptionMapper;
 import com.medical.pojo.req.prescription.PrescriptionPage;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.AdminService;
 import com.medical.service.NewMessageService;
 import com.medical.service.PrescriptionService;
+import com.medical.service.UserInfoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +44,7 @@ public class PrescriptionServiceImpl extends ServiceImpl<PrescriptionMapper, Pre
                 .eq(StringUtils.isNotBlank(dto.getAccount()),Prescription::getAccount, dto.getAccount())
                 .ge(dto.getStartTime() != null, Prescription::getCreateTime, dto.getStartTime())
                 .le(dto.getEndTime() != null, Prescription::getCreateTime, dto.getEndTime())
-                .orderByAsc(Prescription::getStatus)
+                //.orderByAsc(Prescription::getStatus)
                 .orderByDesc(Prescription::getCreateTime);
         return page(iPage, queryWrapper);
     }
@@ -55,6 +59,17 @@ public class PrescriptionServiceImpl extends ServiceImpl<PrescriptionMapper, Pre
         prescription.setCreateTime(LocalDateTime.now());
         prescription.setUserId(playerTokenResp.getId());
         save(prescription);
+
+
+/*        Admin admin = adminService.findByAccount(InitConfig.SUPER_ADMIN_ACCOUNT);
+        newMessageService.addNewMessage(
+                2,
+                null,
+                "开处方药下单了,用户:"+playerTokenResp.getUsername(),
+                prescription.getId(),
+                admin.getId(),
+                playerTokenResp.getUsername()
+                );*/
     }
 
     @Override

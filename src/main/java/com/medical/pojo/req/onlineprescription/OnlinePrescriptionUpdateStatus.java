@@ -11,7 +11,7 @@ public class OnlinePrescriptionUpdateStatus implements Serializable {
     private static final long serialVersionUID = 7315576712880311861L;
 
     @NotNull(message = "id不能为空")
-    @ApiModelProperty("0待处理 1处理中 2已完成")
+    @ApiModelProperty("id")
     private Long id;
 
     @NotNull(message = "修改状态不能为空")

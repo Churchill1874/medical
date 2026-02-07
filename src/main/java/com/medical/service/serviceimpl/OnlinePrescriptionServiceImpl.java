@@ -6,7 +6,9 @@ import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.medical.common.exception.DataException;
 import com.medical.common.tools.TokenTools;
+import com.medical.config.InitConfig;
 import com.medical.entity.Admin;
 import com.medical.entity.OnlinePrescription;
 import com.medical.mapper.OnlinePrescriptionMapper;
@@ -14,6 +16,7 @@ import com.medical.pojo.req.onlineprescription.OnlinePrescriptionAdd;
 import com.medical.pojo.req.onlineprescription.OnlinePrescriptionPage;
 import com.medical.pojo.req.onlineprescription.OnlinePrescriptionUpdateStatus;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.AdminService;
 import com.medical.service.NewMessageService;
 import com.medical.service.OnlinePrescriptionService;
 import org.apache.commons.lang3.StringUtils;
@@ -25,6 +28,8 @@ import java.time.LocalDateTime;
 @Service
 public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptionMapper, OnlinePrescription> implements OnlinePrescriptionService {
 
+    @Resource
+    private AdminService adminService;
     @Resource
     private NewMessageService newMessageService;
 
@@ -50,6 +55,19 @@ public class OnlinePrescriptionServiceImpl extends ServiceImpl<OnlinePrescriptio
         onlinePrescription.setAccount(playerTokenResp.getUsername());
         onlinePrescription.setStatus(0);
         save(onlinePrescription);
+
+/*
+        Admin admin = adminService.findByAccount(InitConfig.SUPER_ADMIN_ACCOUNT);
+        newMessageService.addNewMessage(
+                3,
+                null,
+                "咨询处方药下单了,用户:"+playerTokenResp.getUsername(),
+                onlinePrescription.getId(),
+                admin.getId(),
+                playerTokenResp.getUsername()
+        );
+*/
+
         return onlinePrescription;
     }
 

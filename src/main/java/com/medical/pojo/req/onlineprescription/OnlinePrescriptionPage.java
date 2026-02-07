@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class OnlinePrescriptionPage extends PageBase implements Serializable {
     private static final long serialVersionUID = 8215507479071000096L;
 
-    @ApiModelProperty("0待处理 1处理中 2取消 3完成")
+    @ApiModelProperty("0待处理 1处理中 2已完成")
     private Integer status;
 
     @ApiModelProperty("真实姓名")

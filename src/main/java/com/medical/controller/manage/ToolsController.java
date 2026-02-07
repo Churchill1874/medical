@@ -68,7 +68,7 @@ public class ToolsController {
             Files.write(filePath, file.getBytes());
 
             String path = uploadDir + "/" + imageName;
-            uploadRecordService.insertRecord(path, fileTypeEnum, TokenTools.getPlayerToken(true).getUsername());
+            uploadRecordService.insertRecord(path, fileTypeEnum, TokenTools.getAdminToken(true).getName());
             return R.ok(path);
         } catch (Exception e) {
             e.printStackTrace();

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.medical.common.exception.DataException;
 import com.medical.common.tools.TokenTools;
+import com.medical.config.InitConfig;
 import com.medical.entity.Admin;
 import com.medical.entity.Dialogue;
 import com.medical.entity.OfflineTranslation;
@@ -15,6 +16,7 @@ import com.medical.mapper.DialogueMapper;
 import com.medical.mapper.OfflineTranslationMapper;
 import com.medical.pojo.req.offlinetranslation.OfflineTranslationPage;
 import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.AdminService;
 import com.medical.service.NewMessageService;
 import com.medical.service.OfflineTranslationService;
 import io.swagger.models.auth.In;
@@ -28,6 +30,8 @@ import java.util.Set;
 @Service
 public class OfflineTranslationServiceImpl extends ServiceImpl<OfflineTranslationMapper, OfflineTranslation> implements OfflineTranslationService {
 
+    @Resource
+    private AdminService adminService;
     @Resource
     private NewMessageService newMessageService;
 
@@ -60,6 +64,16 @@ public class OfflineTranslationServiceImpl extends ServiceImpl<OfflineTranslatio
         dto.setCreateName(playerTokenResp.getRealName());
         dto.setCreateTime(LocalDateTime.now());
         save(dto);
+
+/*        Admin admin = adminService.findByAccount(InitConfig.SUPER_ADMIN_ACCOUNT);
+        newMessageService.addNewMessage(
+                4,
+                null,
+                "线下陪同下单了,用户:"+playerTokenResp.getUsername(),
+                dto.getId(),
+                admin.getId(),
+                playerTokenResp.getUsername()
+        );*/
     }
 
     @Override

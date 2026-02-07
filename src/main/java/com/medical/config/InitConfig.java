@@ -18,9 +18,9 @@ public class InitConfig {
 
 
     //超管管理员账号
-    private static final String SUPER_ADMIN_ACCOUNT = "superadmin";
+    public static final String SUPER_ADMIN_ACCOUNT = "superadmin";
 
-    private static final String PASSWORD = "111111a";
+    public static final String PASSWORD = "111111a";
 
     //获取创建机器人开关
     @Value("${init.create.bot}")
@@ -48,5 +48,9 @@ public class InitConfig {
         }
     }
 
+    public static void main(String[] args) {
+        String password = CodeTools.md5AndSalt("admin.123");
+        log.info("password生成的密码是: {}", password);
+    }
 
 }

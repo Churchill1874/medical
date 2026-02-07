@@ -48,6 +48,8 @@ public class PrescriptionApi {
 
         IPage<Prescription> prescriptionIPage = prescriptionService.queryPage(req);
         IPage<PrescriptionResp> iPage = new Page<>(req.getPageNum(), req.getPageSize());
+        iPage.setPages(prescriptionIPage.getPages());
+        iPage.setTotal(prescriptionIPage.getTotal());
 
         List<Prescription> prescriptionIdList = prescriptionIPage.getRecords();
 

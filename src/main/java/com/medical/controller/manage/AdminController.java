@@ -6,16 +6,19 @@ import com.baomidou.mybatisplus.extension.api.R;
 import com.medical.common.tools.CodeTools;
 import com.medical.common.tools.GenerateTools;
 import com.medical.common.tools.HttpTools;
+import com.medical.common.tools.TokenTools;
 import com.medical.entity.Admin;
 import com.medical.pojo.req.admin.AdminLogin;
 import com.medical.pojo.req.admin.AdminPage;
 import com.medical.pojo.resp.admin.UnfinishCountReport;
+import com.medical.pojo.resp.player.PlayerTokenResp;
 import com.medical.pojo.resp.verification.VerificationCodeResp;
 import com.medical.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.ehcache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +34,8 @@ import javax.validation.Valid;
 @RequestMapping("/manage/admin")
 public class AdminController {
 
+    @Resource
+    private NewMessageService newMessageService;
     @Resource
     private OfflineTranslationService offlineTranslationService;
     @Resource
@@ -67,7 +72,7 @@ public class AdminController {
     @ApiOperation(value = "登录", notes = "登录")
     public R<String> login(@RequestBody @Valid AdminLogin dto) {
         String verifyCode = ehcacheService.verificationCache().get(HttpTools.getIp());
-        if (StringUtils.isEmpty(verifyCode) || !dto.getVerifyCode().equals(verifyCode)) {
+        if (StringUtils.isEmpty(verifyCode) || !dto.getVerifyCode().equalsIgnoreCase(verifyCode)) {
             return R.failed("验证码有误或已过期");
         }
         Admin admin = adminService.findByAccount(dto.getAccount());
@@ -103,6 +108,16 @@ public class AdminController {
     }
 
 
+    @PostMapping("/logout")
+    @ApiOperation(value = "退出登录", notes = "退出登录")
+    public R logout() {
+        Admin admin = TokenTools.getAdminToken(true);
+
+        Cache<String, Admin> cache = ehcacheService.getAdminTokenCache();
+        cache.remove(admin.getTokenId());
+
+        return R.ok(null);
+    }
 
 
 }
