@@ -78,4 +78,3 @@ init:
   create:
     bot: false  # 创建机器人开关
 
-tencent:
