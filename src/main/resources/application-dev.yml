@@ -79,5 +79,3 @@ init:
     bot: false  # 创建机器人开关
 
 tencent:
-  secretId: AKID8FC3pV1lOvUvMgKpHbopqiPvFNI3e6Rh
-  secretKey: AoJhyDKJAtbGm7SfhYHqKfpqpfMsCKNG
