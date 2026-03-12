@@ -1,0 +1,127 @@
+package com.medical.service.serviceimpl;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
+import com.medical.common.exception.DataException;
+import com.medical.common.tools.TokenTools;
+import com.medical.config.InitConfig;
+import com.medical.entity.Admin;
+import com.medical.entity.Dialogue;
+import com.medical.entity.OfflineTranslation;
+import com.medical.entity.OnlineConsultation;
+import com.medical.mapper.DialogueMapper;
+import com.medical.mapper.OfflineTranslationMapper;
+import com.medical.pojo.req.offlinetranslation.OfflineTranslationPage;
+import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.AdminService;
+import com.medical.service.NewMessageService;
+import com.medical.service.OfflineTranslationService;
+import io.swagger.models.auth.In;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+@Service
+public class OfflineTranslationServiceImpl extends ServiceImpl<OfflineTranslationMapper, OfflineTranslation> implements OfflineTranslationService {
+
+    @Resource
+    private AdminService adminService;
+    @Resource
+    private NewMessageService newMessageService;
+
+    @Override
+    public IPage<OfflineTranslation> queryPage(OfflineTranslationPage dto) {
+        IPage<OfflineTranslation> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
+        LambdaQueryWrapper<OfflineTranslation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(StringUtils.isNotBlank(dto.getMedicalType()), OfflineTranslation::getMedicalType, dto.getMedicalType())
+                .eq(StringUtils.isNotBlank(dto.getProjectType()), OfflineTranslation::getProjectType, dto.getProjectType())
+                .eq(dto.getGender() != null, OfflineTranslation::getGender, dto.getGender())
+                .eq(dto.getAge() != null, OfflineTranslation::getAge, dto.getAge())
+                .eq(StringUtils.isNotBlank(dto.getRealName()), OfflineTranslation::getRealName, dto.getRealName())
+                .eq(StringUtils.isNotBlank(dto.getEmail()), OfflineTranslation::getEmail, dto.getEmail())
+                .eq(StringUtils.isNotBlank(dto.getPhone()), OfflineTranslation::getPhone, dto.getPhone())
+                .eq(StringUtils.isNotBlank(dto.getStatus()), OfflineTranslation::getStatus, dto.getStatus())
+                .eq(StringUtils.isNotBlank(dto.getWechat()), OfflineTranslation::getWechat, dto.getWechat())
+                .eq(dto.getUserId() != null,  OfflineTranslation::getUserId, dto.getUserId())
+                .eq(StringUtils.isNotBlank(dto.getUsername()), OfflineTranslation::getUsername, dto.getUsername())
+                .orderByDesc(OfflineTranslation::getCreateTime);
+        return page(iPage,queryWrapper);
+    }
+
+    @Override
+    public void addOfflineTranslation(OfflineTranslation dto) {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        dto.setUserId(playerTokenResp.getId());
+        dto.setUsername(playerTokenResp.getUsername());
+        dto.setStatus("待付款");
+        dto.setCreateName(playerTokenResp.getRealName());
+        dto.setCreateTime(LocalDateTime.now());
+        save(dto);
+
+        String content = dto.getMedicalType() + "线下陪同订单下单了";
+        newMessageService.addNewMessage(4, dto.getMedicalType(), content , dto.getId(), dto.getUserId(), dto.getUsername());
+
+/*        Admin admin = adminService.findByAccount(InitConfig.SUPER_ADMIN_ACCOUNT);
+        newMessageService.addNewMessage(
+                4,
+                null,
+                "线下陪同下单了,用户:"+playerTokenResp.getUsername(),
+                dto.getId(),
+                admin.getId(),
+                playerTokenResp.getUsername()
+        );*/
+    }
+
+    @Override
+    public void updateStatus(Long id, String status) {
+        Admin admin = TokenTools.getAdminToken(true);
+        LambdaUpdateWrapper<OfflineTranslation> updateWrapper = new LambdaUpdateWrapper<>();
+        updateWrapper
+                .eq(OfflineTranslation::getId, id)
+                .set(OfflineTranslation::getStatus, status)
+                .set(OfflineTranslation::getUpdateTime, LocalDateTime.now())
+                .set(OfflineTranslation::getUpdateName, admin.getName());
+        update(updateWrapper);
+
+        OfflineTranslation offlineTranslation = getById(id);
+
+        String content = offlineTranslation.getMedicalType() + "线下陪同订单状态变化" + status;
+        newMessageService.addNewMessage(4, offlineTranslation.getMedicalType(), content , id, offlineTranslation.getUserId(), admin.getName());
+    }
+
+
+    @Override
+    public void deleteById(Long id) {
+        removeById(id);
+    }
+
+    @Override
+    public int unfinishedCount(Long userId) {
+        List<String> list = new ArrayList<>();
+        list.add("预约成功");
+        list.add("预约取消");
+        LambdaQueryWrapper<OfflineTranslation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.notIn(OfflineTranslation::getStatus, list);
+        queryWrapper.eq(userId != null, OfflineTranslation::getUserId, userId);
+        return count(queryWrapper);
+    }
+
+    @Override
+    public OfflineTranslation findById(Long id, Long userId) {
+        OfflineTranslation offlineTranslation = getById(id);
+        newMessageService.deleteNewMessage(Lists.newArrayList(4), offlineTranslation.getMedicalType(), id, userId);
+        return offlineTranslation;
+    }
+
+
+}

@@ -1,0 +1,117 @@
+package com.medical.service.serviceimpl;
+
+import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.medical.common.tools.TokenTools;
+import com.medical.config.InitConfig;
+import com.medical.entity.Admin;
+import com.medical.entity.Dialogue;
+import com.medical.entity.OnlineConsultation;
+import com.medical.entity.OnlinePrescription;
+import com.medical.mapper.DialogueMapper;
+import com.medical.mapper.OnlineConsultationMapper;
+import com.medical.pojo.req.onlineconsultation.OnlineConsultationAdd;
+import com.medical.pojo.req.onlineconsultation.OnlineConsultationPage;
+import com.medical.pojo.resp.player.PlayerTokenResp;
+import com.medical.service.AdminService;
+import com.medical.service.NewMessageService;
+import com.medical.service.OnlineConsultationService;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+public class OnlineConsultationServiceImpl extends ServiceImpl<OnlineConsultationMapper, OnlineConsultation> implements OnlineConsultationService {
+
+    @Resource
+    private AdminService adminService;
+    @Resource
+    private NewMessageService newMessageService;
+
+    @Override
+    public IPage<OnlineConsultation> queryPage(OnlineConsultationPage dto, Long userId) {
+        IPage<OnlineConsultation> iPage = new Page<>(dto.getPageNum(), dto.getPageSize());
+        LambdaQueryWrapper<OnlineConsultation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper
+                .eq(userId != null, OnlineConsultation::getUserId, userId)
+                .eq(dto.getStatus() != null, OnlineConsultation::getStatus, dto.getStatus())
+                .eq(StringUtils.isNotBlank(dto.getRealName()), OnlineConsultation::getRealName, dto.getRealName());
+        queryWrapper.orderByDesc(OnlineConsultation::getCreateTime);
+        return page(iPage, queryWrapper);
+    }
+
+    @Override
+    public OnlineConsultation addOnlineConsultation(OnlineConsultationAdd dto) {
+        PlayerTokenResp playerTokenResp = TokenTools.getPlayerToken(true);
+        OnlineConsultation onlineConsultation = BeanUtil.toBean(dto, OnlineConsultation.class);
+        onlineConsultation.setStatus(4);
+        onlineConsultation.setCreateName(playerTokenResp.getUsername());
+        onlineConsultation.setUserId(playerTokenResp.getId());
+        onlineConsultation.setCreateTime(LocalDateTime.now());
+        this.save(onlineConsultation);
+
+        String content = "重大疾病在线咨询问诊下订单了";
+        newMessageService.addNewMessage(5, null, content , onlineConsultation.getId(), onlineConsultation.getUserId(), playerTokenResp.getUsername());
+
+/*        Admin admin = adminService.findByAccount(InitConfig.SUPER_ADMIN_ACCOUNT);
+        newMessageService.addNewMessage(
+                5,
+                null,
+                "重大疾病咨询,用户:"+playerTokenResp.getUsername(),
+                onlineConsultation.getId(),
+                admin.getId(),
+                playerTokenResp.getUsername()
+        );*/
+        return onlineConsultation;
+    }
+
+    @Override
+    public void updateStatusById(Long id, Integer status, String adminName) {
+        UpdateWrapper<OnlineConsultation> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda()
+                .set(OnlineConsultation::getCreateName, adminName)
+                .set(OnlineConsultation::getStatus, status)
+                .eq(OnlineConsultation::getId, id);
+        this.update(updateWrapper);
+
+        OnlineConsultation onlineConsultation = getById(id);
+
+        newMessageService.addNewMessage(5, null, "重大疾病在线咨询问诊订单状态变化" + status, id, onlineConsultation.getUserId(), adminName);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        removeById(id);
+    }
+
+    @Override
+    public int unfinishedCount(Long userId) {
+        LambdaQueryWrapper<OnlineConsultation> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ne(OnlineConsultation::getStatus, 2);
+        queryWrapper.eq(userId != null, OnlineConsultation::getUserId, userId);
+        return count(queryWrapper);
+    }
+
+    @Override
+    public OnlineConsultation findById(Long id, Long userId) {
+        OnlineConsultation onlineConsultation = getById(id);
+        newMessageService.deleteNewMessage(Lists.newArrayList(5,6), null, id, userId);
+        return onlineConsultation;
+    }
+
+
+}
